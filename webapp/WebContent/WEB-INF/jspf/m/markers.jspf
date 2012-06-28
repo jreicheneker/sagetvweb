@@ -1,0 +1,53 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sagefav" tagdir="/WEB-INF/tags/sage/api/favorite" %> 
+<%@ taglib prefix="sagemf" tagdir="/WEB-INF/tags/sage/api/mediafile" %> 
+<%@ taglib prefix="sageshow" tagdir="/WEB-INF/tags/sage/api/show" %> 
+<%@ taglib prefix="sageair" tagdir="/WEB-INF/tags/sage/api/airing" %> 
+
+<%@ include file="contextpath.jspf"%>
+
+<sageair:IsFavorite var="isFavorite" airing="${airing}" />
+<sageair:IsManualRecord var="isManualRecord" airing="${airing}" />
+
+<c:if test="${isFavorite && !isManualRecord}">
+   <sagefav:GetFavoriteForAiring var="favorite" airing="${airing}" />
+   <sagefav:IsFirstRunsOnly var="isFirstRunsOnly" favorite="${favorite}" />
+   <sagefav:IsReRunsOnly var="isReRunsOnly" favorite="${favorite}" />
+   <sagefav:IsFirstRunsAndReRuns var="isFirstRunsAndReRuns" favorite="${favorite}" />
+   <c:if test="${isFirstRunsOnly}">
+      <img src="${cp}/m/images/RecordFavFirstMobile.png" alt="Record First Runs" title="Record First Runs" />
+   </c:if>
+   <c:if test="${isReRunsOnly}">
+      <img src="${cp}/m/images/RecordFavRerunMobile.png" alt="Record Reruns" title="Record Reruns" />
+   </c:if>
+   <c:if test="${isFirstRunsAndReRuns}">
+      <img src="${cp}/m/images/RecordFavAllMobile.png" alt="Record First Runs and Reruns" title="Record First Runs and Reruns" />
+   </c:if>
+</c:if>
+<%--else--%><c:if test="${!isFavorite || isManualRecord}">
+   <c:if test="${isManualRecord}">
+      <img src="${cp}/m/images/RecordMRMobile.png" alt="Manual Recording" title="Manual Recording"/>
+   </c:if>
+</c:if>
+<%--/c:if--%>
+<sageshow:IsShowFirstRun var="isFirstRun" airing="${airing}"/>
+<c:if test="${isFirstRun}">
+   <img src="${cp}/m/images/MarkerFirstRunMobile.png" alt="First Run" title="First Run" />
+</c:if>
+<sageair:IsWatched var="isWatched" airing="${airing}"/>
+<c:if test="${isWatched}">
+   <img src="${cp}/m/images/MarkerWatchedMobile.png" alt="Watched" title="Watched" />
+</c:if>
+<%--br/--%>
+<sageair:IsAiringHDTV var="isHDTV" airing="${airing}"/>
+<c:if test="${isHDTV}">
+   <img src="${cp}/m/images/MarkerHDTVMobile.png" alt="HDTV" title="HDTV" />
+</c:if>
+<sagemf:IsLibraryFile var="isLibraryFile" mediaFile="${airing}"/>
+<c:if test="${isLibraryFile}">
+   <img src="${cp}/m/images/MarkerArchivedMobile.png" alt="Archived" title="Archived" />
+</c:if>
+<sageair:IsDontLike var="isDontLike" airing="${airing}"/>
+<c:if test="${isDontLike}">
+   <img src="${cp}/m/images/MarkerDontLikeMobile.png" alt="Don't Like" title="Don't Like" />
+</c:if>

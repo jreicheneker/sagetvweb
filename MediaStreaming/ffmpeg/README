@@ -1,0 +1,75 @@
+Merging SageTV's patched ffmpeg with AirVideo's patched ffmpeg (with segmenter)
+===============================================================================
+
+SageTV 7.0.13's ffmpeg is based on svn revision 24249.  There are two files from
+Sage.  ffmpeg-sage-7.0.13.zip is their full ffmpeg patched source.  libavformat-sage-
+7.0.13.zip is a patch for usleep.  Apply the second file to the first and save in the
+ffmpeg-sage-7.0.13 directory.  (These merges should already be applied but are mentioned
+here to document the steps).
+
+AirVideo's ffmpeg as of 7/31/10 was mainly based on svn revision 21569.  It includes
+ffmpeg, an HTTP Live Streaming segmenter, and configure scripts for Windows and Mac.
+The latest revision can be downloaded from http://www.inmethod.com/air-video/licenses.html.
+Direct link: http://www.inmethod.com/air-video/download/ffmpeg-for-2.2.5.tar.bz2.
+
+ffmpeg-segmenter.diff was created using the Kompare tool by comparing the ffmpeg-r21659
+and ffmpeg-for-2.2.5 directories.  This is a list of all the changes made by InMethod AirVideo.
+This set of changes is then applied to the ffmpeg-sage-7.0.13-and-segmenter-2.2.5
+directory.
+
+I patched the following files from InMethod AirVideo.  Also merge any
+new files (mainly those that begin with an underscore '_').  Don't worry about libswscale changes.
+
+    libavcodec/resample.c
+    libavformat/mpegtsenc.c
+    libavformat/os_support.c/h
+    ffmpeg.c
+    (and maybe configure)
+
+ffmpeg source can be retrieved using the following commands in Linux:
+
+    svn checkout svn://svn.ffmpeg.org/ffmpeg/trunk ffmpeg-r21587 -r 21587
+    svn checkout svn://svn.ffmpeg.org/ffmpeg/trunk ffmpeg-r21622 -r 21622
+    svn checkout svn://svn.ffmpeg.org/ffmpeg/trunk ffmpeg-r21659 -r 21659
+    svn checkout svn://svn.ffmpeg.org/ffmpeg/trunk ffmpeg-r24249 -r 24249
+
+Build scripts for each platform are (TODO, this is not accurate or complete):
+
+    make-linux32
+    make-macos
+    make-mingw32/mbuild.sh (windows)
+
+On Windows, cygwin must be set up before building anything else.  A copy of cygwin
+used to build the binaries is in the cygwin.zip file.
+http://www.cygwin.com
+
+Several dependencies need to be downloaded and built before building ffmpeg (copies
+of these files are in the 'packages' directory):
+
+    AirVideo Server
+    http://www.inmethod.com/air-video/licenses.html
+
+    libx264
+    ftp://ftp.videolan.org/pub/videolan/x264/snapshots/
+
+    faad2, faac
+    http://www.audiocoding.com/downloads.html
+
+    lame
+    http://sourceforge.net/projects/lame/files/lame/
+
+    yasm
+    http://www.tortall.net/projects/yasm/wiki/Download
+
+    xvidcore
+    ?/xvidcore-1.2.2.tar.gz would not build, use xvidcore-bin.zip instead
+
+
+
+A few notes to myself:
+building ffmpeg
+http://webcache.googleusercontent.com/search?q=cache:Auk-5AZuERkJ:www.cihilt.com/book/export/html/49+ffmpeg+%22-L/usr/local/lib%22&cd=28&hl=en&ct=clnk&gl=us
+If Libraries couldnt be found and it gave error message on make, try to run the ffmpeg configure lines with path to libs
+./configure --enable-shared --enable-libmp3lame --enable-xvid --enable-libvorbis --enable-libogg --enable-gpl --enable-libfaad --enable-libfaac --enable-x264 --enable-amr_nb --enable-amr_nb-fixed --enable-pp --extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib
+make
+make install

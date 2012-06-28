@@ -1,0 +1,175 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sagefav" tagdir="/WEB-INF/tags/sage/api/favorite" %> 
+<%@ taglib prefix="sageutil" tagdir="/WEB-INF/tags/sage/api/utility" %> 
+
+<%@ include file="contextpath.jspf"%>
+
+<c:set var="favorite" value="${airing}"/>
+
+<div class="listcell">
+
+   <sagefav:GetFavoriteID var="favoriteId" favorite="${favorite}" />
+   <sagefav:GetFavoriteDescription var="description" favorite="${favorite}" />
+   <c:url var="favoriteDetailUrl" value="favoritedetails.jsp">
+      <c:param name="FavoriteId" value="${favoriteId}"></c:param>
+   </c:url>
+   <div class="title">${status.count}. <a href="${favoriteDetailUrl}">${description}</a></div>
+   <%--sagefav:GetFavoriteTitle var="title" favorite="${favorite}"/>
+   <sagefav:GetFavoriteCategory var="category" favorite="${favorite}"/>
+   <sagefav:GetFavoriteKeyword var="keyword" favorite="${favorite}"/>
+   <sagefav:GetFavoritePerson var="person" favorite="${favorite}"/>
+   <b>${status.count}. <a href="${favoriteDetailUrl}">
+   <c:if test="${!empty title}">${title}</c:if>
+   <c:if test="${!empty category}">${category}</c:if>
+   <c:if test="${!empty keyword}">[${keyword}]</c:if>
+   <c:if test="${!empty person}">${person}</c:if>
+   </a></b><br/--%>
+   <sagefav:IsFirstRunsOnly var="isFirstRunsOnly" favorite="${favorite}" />
+   <sagefav:IsReRunsOnly var="isReRunsOnly" favorite="${favorite}" />
+   <sagefav:IsFirstRunsAndReRuns var="isFirstRunsAndReRuns" favorite="${favorite}" />
+   <sagefav:IsAutoDelete var="isAutoDelete" favorite="${favorite}" />
+   <sagefav:GetKeepAtMost var="keepAtMost" favorite="${favorite}" />
+   <sagefav:GetStartPadding var="startPadding" favorite="${favorite}" />
+   <sagefav:GetStopPadding var="stopPadding" favorite="${favorite}" />
+   <sageutil:NumberFormat var="formattedStartPadding" format="0" number="${startPadding / 60000}"/>
+   <sageutil:NumberFormat var="formattedStopPadding" format="0" number="${stopPadding / 60000}"/>
+   <sagefav:GetFavoriteQuality var="quality" favorite="${favorite}" />
+   <sagefav:GetFavoriteParentalRating var="rating" favorite="${favorite}"/>
+   <sagefav:GetFavoriteRated var="rated" favorite="${favorite}"/>
+   <sagefav:GetFavoriteChannel var="channel" favorite="${favorite}"/>
+   <c:choose>
+      <c:when test="${startPadding < 0}">
+         <c:set var="absStartPadding" value="${-startPadding}"/>
+      </c:when>
+      <c:otherwise>
+         <c:set var="absStartPadding" value="${startPadding}"/>
+      </c:otherwise>
+   </c:choose>
+   <c:choose>
+      <c:when test="${stopPadding < 0}">
+         <c:set var="absStopPadding" value="${-stopPadding}"/>
+      </c:when>
+      <c:otherwise>
+         <c:set var="absStopPadding" value="${stopPadding}"/>
+      </c:otherwise>
+   </c:choose>
+   <p>
+   <c:if test="${isFirstRunsOnly}">
+      <img src="${cp}/m/images/RecordFavFirstMobile.png" alt="First Runs Only" title="First Runs Only"/>
+   </c:if>
+   <c:if test="${isReRunsOnly}">
+      <img src="${cp}/m/images/RecordFavRerunMobile.png" alt="Reruns Only" title="Reruns Only"/>
+   </c:if>
+   <c:if test="${isFirstRunsAndReRuns}">
+      <img src="${cp}/m/images/RecordFavAllMobile.png" alt="First Runs and Reruns" title="First Runs and Reruns"/>
+   </c:if>
+   <c:if test="${isAutoDelete}">
+      <img src="${cp}/m/images/MarkerDeleteMobile.png" alt="Auto Delete" title="Auto Delete"/>
+   </c:if>
+   </p>
+   <c:if test="${keepAtMost == 0}">
+   <p>Keep All</p>
+   </c:if>
+   <c:if test="${keepAtMost > 0}">
+   <p>Keep ${keepAtMost}</p>
+   </c:if>
+   <%-- TODO earlier/later text --%>
+   <p>Pad ${formattedStartPadding}/${formattedStopPadding}</p>
+   <%-- TODO more quality info --%>
+   <c:choose>
+      <c:when test="${empty quality || quality == 'default' || quality == 'Default'}">
+      <p>Default Quality</p>
+      </c:when>
+      <c:otherwise>
+      <p>${quality}</p>
+      </c:otherwise>
+   </c:choose>
+   <p>
+   <c:if test="${!empty rating}">
+      <img src="${cp}/m/images/Rating_${rating}.gif" alt="${rating}" title="${rating}" />
+   </c:if>
+   <c:if test="${!empty rated}">
+      <img src="${cp}/m/images/Rating_${rated}.gif" alt="${rated}" title="${rated}" />
+   </c:if>
+   </p>
+   <%-- TODO timeslot --%>
+   <%-- TODO more channel info --%>
+   <c:if test="${!empty channel}">
+      <p>${channel}</p>
+   </c:if>
+</div>
+
+        <%--
+        // start/stop pad
+		if (showpadding){
+	        long startPadding = getStartPadding() / 60000;
+	        long stopPadding = getStopPadding() / 60000;
+	        String startPaddingString = ((startPadding > 0) ? "+" : "") + Long.toString(startPadding);
+	        String stopPaddingString = ((stopPadding > 0) ? "+" : "") + Long.toString(stopPadding);
+            String tooltip = "";
+            tooltip = Math.abs(startPadding) + " minute" + (Math.abs(startPadding) != 1 ? "s" : "") + (startPadding < 0 ? " later.  " : " earlier.  ");
+            tooltip += Math.abs(stopPadding) + " minute" + (Math.abs(stopPadding) != 1 ? "s" : "") + (stopPadding < 0 ? " earlier." : " later.");
+	        out.println("            <td class=\"paddingcell\"><div class=\""+tdclass+"\" title=\"" + Translate.encode(tooltip) + "\">");
+	        out.println("                Pad<br/> " + Translate.encode(startPaddingString) + "/" +
+	        		Translate.encode(stopPaddingString));
+	        out.println("            </div></td>");
+		}
+		--%>
+        <%--
+        // quality
+		if (showquality){
+	        out.println("            <td class=\"qualitycell\"><div class=\""+tdclass+"\">");
+	        String qualityName = getQuality();
+	        RecordingQuality quality = new RecordingQuality(qualityName);
+            if ((qualityName == null) || (qualityName.equals("Default")) || (qualityName.trim().length() == 0)) {
+                quality = RecordingQuality.getDefaultRecordingQuality();
+                qualityName = quality.getName();
+                out.println("                <span title=\"" + quality.getName() + " - " +
+                        quality.getFormat() + " @ " + quality.getGigabytesPerHour() + " GB/hr\">Default</span>");
+            } else {
+                out.println("                " + quality.getName() + "<br/>" +
+                        quality.getFormat() + " @ " + quality.getGigabytesPerHour() + " GB/hr");
+            }
+	        out.println("            </div></td>");
+		}
+        --%>
+        <%--
+        // day/hour
+		if (showtimeslot){
+			out.println("            <td class=\"dayhourcell\"><div class=\""+tdclass+"\">");
+			out.println("                " + Translate.encode(getDay()) + "<br/>" + Translate.encode(getTime()));
+			out.println("            </div></td>");
+		}
+
+        // channel
+		if (showchannels){
+			String favoriteChannelName = getChannel();
+			out.println("            <td class=\"favchannelcell\"><div class=\""+tdclass+"\">");
+			if ((favoriteChannelName != null) && (favoriteChannelName.trim().length() > 0)) {
+				Object channels = SageApi.Api("GetAllChannels");
+				int channelCount = SageApi.Size(channels);
+				Object channel = null;
+				String channelName = "";
+				String channelNumber = "";
+				int channelId = 0;
+				for (int i = 0; i < channelCount; i++) {
+					Object currentChannel = SageApi.GetElement(channels, i);
+					String currentChannelName = SageApi.StringApi("GetChannelName",new Object[]{currentChannel});
+					if (favoriteChannelName.equals(currentChannelName)) {
+						channel = currentChannel;
+						channelName = currentChannelName;
+						channelNumber = SageApi.StringApi("GetChannelNumber",new Object[]{currentChannel});
+						channelId = SageApi.IntApi("GetStationID",new Object[]{currentChannel});
+						break;
+					}
+				}
+				out.println("                " + Translate.encode(channelNumber) + " - ");
+				if ( usechannellogos && null != SageApi.Api("GetChannelLogo",channel) ) {
+					out.println("                <img class=\"infochannellogo\" src=\"ChannelLogo?ChannelID="+channelId+"\" alt=\""+Translate.encode(channelName)+" logo\" title=\""+Translate.encode(channelName)+"\"/>");
+				} else {
+					out.println("                " + Translate.encode(channelName));
+				}
+			}
+			out.println("            </div></td>");
+		}
+        --%>

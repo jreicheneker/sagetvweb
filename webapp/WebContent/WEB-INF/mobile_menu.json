@@ -1,0 +1,102 @@
+[
+   {
+      'title' : 'Media Center',
+      'link'  : null,
+      'image' : 'images/MediaCenter.png',
+      'items' :
+      [
+         {
+            'title' : 'Home',
+            'link'  : 'home.jsp',
+         },
+         {
+            'title' : 'Recordings',
+            'link'  : 'recordings.jsp',
+            'image' : 'images/GoRecordingsMobile.png'
+         },
+         {
+            'title' : 'Search Airings',
+            'link'  : 'searchairings.jsp',
+            'image' : 'images/SearchIconMobile.png'
+         },
+         {
+            'title' : 'Search Recordings',
+            'link'  : 'searchrecordings.jsp',
+            'image' : 'images/SearchIconMobile.png'
+         },
+         {
+            'title' : 'Video Conversions',
+            'link'  : 'conversions.jsp'
+         },
+         {
+            'title' : 'System Messages',
+            'link'  : 'systemmessages.jsp',
+            'image' : 'images/MarkerSysAlert1Mobile.png'
+         },
+      ]
+   },
+      {
+      'title' : 'Web Remote',
+      'link'  : null,
+      'image' : 'images/MediaCenter.png',
+      'items' :
+      [
+
+      ]
+   },
+   {
+      'title' : 'Schedule',
+      'link'  : null,
+      'image' : null,
+      'items' :
+      [
+         {
+            'title' : 'Upcoming Recordings',
+            'link'  : 'recordingschedule.jsp',
+            'image' : 'images/GoScheduleMobile.png'
+         },
+         {
+            'title' : 'Manage Favorites',
+            'link'  : 'favorites.jsp',
+            'image' : 'images/RecordFavAllMobile.png'
+         },
+         {
+            'title' : 'Create Timed Recording',
+            'link'  : 'createtimedrecording.jsp'
+         },
+         {
+            'title' : 'Resolve Recording Conflicts',
+            'link'  : 'conflicts.jsp',
+            'image' : 'images/ConflictResolvedMobile.png'
+         },
+      ]
+   },
+   {
+      'title' : 'Guide',
+      'link'  : null,
+      'image' : null,
+      'items' :
+      [
+         {
+            'title' : 'Listings',
+            'link'  : 'listings.jsp?CategoryFilter=yes'
+         },
+         {
+            'title' : 'HD Listings',
+            'link'  : 'listings.jsp?OnlyHDTV=true&CategoryFilter=yes'
+         },
+      ]
+   },
+   {
+      'title' : 'About',
+      'link'  : null,
+      'image' : null,
+      'items' :
+      [
+         {
+            'title' : 'Credits',
+            'link'  : 'credits.jsp'
+         }
+      ]
+   },
+]

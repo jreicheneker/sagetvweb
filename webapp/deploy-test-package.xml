@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="SageWebApp" default="deploy">
+
+   <property file="build.properties"/>
+
+   <property name="test.download.url.location" value="http://localhost/sageplugins"/>
+   <property name="test.download.url.params" value=""/>
+
+   <property name="download.url.location" value="${test.download.url.location}"/>
+   <property name="download.url.params" value="${test.download.url.params}"/>
+   
+   <property name="test.webserver.home" value="/var/www"/>
+   <property name="test.sagetv.home" value="/opt/sagetv/server"/>
+
+   <target name="build">
+      <ant antfile="build.xml" target="dist"/>
+   </target>
+
+   <target name="deploy" depends="build">
+      <unzip dest="${test.webserver.home}">
+         <fileset dir="dist">
+            <include name="sagewebapp-plugin*.zip"/>
+         </fileset>
+      </unzip>
+
+      <copy todir="${test.sagetv.home}">
+         <fileset dir="build/packages" includes="plugin*.xml"/>
+         <mergemapper to="SageTVPluginsDev.xml"/>
+      </copy>
+   </target>
+
+</project>

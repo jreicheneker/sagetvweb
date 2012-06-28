@@ -1,0 +1,61 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sagemf" tagdir="/WEB-INF/tags/sage/api/mediafile" %> 
+<%@ taglib prefix="sageshow" tagdir="/WEB-INF/tags/sage/api/show" %> 
+<%@ taglib prefix="sageair" tagdir="/WEB-INF/tags/sage/api/airing" %> 
+<%@ taglib prefix="sagech" tagdir="/WEB-INF/tags/sage/api/channel" %> 
+<%@ taglib prefix="sageutil" tagdir="/WEB-INF/tags/sage/api/utility" %> 
+<%@ taglib prefix="sagefmf" tagdir="/WEB-INF/tags/sage/functions/mediafile" %> 
+
+<%@ include file="contextpath.jspf"%>
+
+<c:set var="airing" value="${recording}"/>
+
+<sageair:GetAiringTitle var="title" airing="${airing}"/>
+<sagemf:GetMediaFileID var="mediaFileId" mediaFile="${recording}"/>
+<sageshow:GetShowEpisode var="episode" show="${recording}" />
+<sageshow:GetShowDescription var="description" show="${recording}" />
+<sagech:GetChannelName var="channelName" channel="${recording}" />
+<sagech:GetChannelNumber var="channelNumber" channel="${recording}" />
+<sageair:GetAiringStartTime var="airingStartTime" airing="${recording}" />
+<sageair:GetAiringEndTime var="airingEndTime" airing="${recording}" />
+<c:url var="recordingDetailUrl" value="details.jsp">
+   <c:param name="MediaFileId" value="${mediaFileId}"></c:param>
+</c:url>
+
+<div class="listcell">
+   <sagemf:IsFileCurrentlyRecording var="isFileRecording" mediaFile="${recording}"/>
+   <sageair:IsWatched var="isWatched" airing="${recording}"/>
+   <div class="title<c:if test="${isWatched == true}"> watched</c:if>">
+   <c:if test="${empty episode}">
+      <c:if test="${!empty status}">${status.count}. </c:if><a href="${recordingDetailUrl}">${title}</a>
+   </c:if>
+   <c:if test="${!empty episode}">
+      <c:if test="${!empty status}">${status.count}. </c:if><a href="${recordingDetailUrl}">${episode}</a>
+   </c:if>
+   <c:if test="${isFileRecording == true}">
+      <img src="${cp}/images/RecordingNowMobile.png" alt="This show is currently recording." title="This show is currently recording."/>
+   </c:if>
+   </div>
+   <p><%@ include file="markers.jspf" %></p>
+   <sageair:GetMediaFileForAiring var="mediaFile" airing="${recording}"/>
+   <sageutil:DateFormat var="airingDate" date="${airingStartTime}" format="EEE, MMM d"/>
+   <sageutil:PrintTimeShort var="airingStartTime" time="${airingStartTime}"/>
+   <sageutil:PrintTimeShort var="airingEndTime" time="${airingEndTime}"/>
+   <p>${airingDate}, ${airingStartTime}<%-- - ${airingEndTime}--%></p>
+   <c:if test="${!empty channelNumber}"><p>${channelNumber}-${channelName}</p></c:if>	
+
+   <sagemf:GetSize var="size" mediaFile="${mediaFile}"/>
+   <c:set var="size" value="${size / 1000000}"/>
+   <p>
+   <c:if test="${size > 1000}">
+      <sageutil:NumberFormat var="formattedSize" format="0.00" number="${size / 1000}"/>
+      ${formattedSize} GB
+   </c:if>
+   <c:if test="${size <= 1000}">
+      <sageutil:NumberFormat var="formattedSize" format="0.00" number="${size}"/>
+      ${formattedSize} MB
+   </c:if>
+   <sagefmf:GetMediaFileFormatName var="format" mediafile="${mediaFile}"/>
+   ${format}
+   </p>
+</div>

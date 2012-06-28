@@ -1,0 +1,69 @@
+<?xml version="1.0"  encoding="ISO-8859-1"?>
+<!DOCTYPE Configure PUBLIC "-//Mort Bay Consulting//DTD Configure//EN" "http://jetty.mortbay.org/configure.dtd">
+<Configure class="org.mortbay.jetty.webapp.WebAppContext">
+  <Set name="contextPath">/apps</Set>
+
+  <Set name="displayName">SageTV Web Applications</Set>
+  <Call name="setAttribute">
+     <Arg>pluginid</Arg>
+     <Arg>jetty</Arg>
+  </Call>
+  <Call name="setAttribute">
+     <Arg>webpage</Arg>
+     <Arg></Arg>
+  </Call>
+
+  <!--Set name="resourceBase"><SystemProperty name="jetty.home" default="."/>/webapps/apps</Set-->
+  <Set name="war">
+    <SystemProperty name="jetty.home" default="."/>/webapps/apps.war
+  </Set>
+  <Set name="tempDirectory">
+    <SystemProperty name="jetty.home" default="."/>/webapps/apps
+  </Set>
+  <Set name="defaultsDescriptor">
+    <SystemProperty name="jetty.home" default="."/>/etc/webdefault.xml
+  </Set>
+  <Set name="extractWAR">true</Set>
+  <Set name="copyWebDir">true</Set>
+
+  <Set name="mimeTypes">
+    <New id="mimeTypes" class="sagex.jetty.content.MimeTypes"/>
+  </Set>
+
+  <!-- http://docs.codehaus.org/display/JETTY/How+to+Configure+Security+with+Embedded+Jetty -->
+  <!-- include security constraints here because the only other place they can be specified
+       is in the web.xml file inside the war file -->
+  <!-- can the constraints be included in another file we won't overwrite? -->
+  <Get name="securityHandler">
+    <Set name="userRealm">
+      <New class="org.mortbay.jetty.security.HashUserRealm">
+        <Set name="name">SageTV Web Interface</Set>
+        <Set name="config"><SystemProperty name="jetty.home" default="."/>/etc/realm.properties</Set>
+      </New>
+    </Set>
+    <Set name="checkWelcomeFiles">true</Set>
+    <Set name="constraintMappings">
+    <!-- TODO create unprotected public area -->
+      <Array type="org.mortbay.jetty.security.ConstraintMapping">
+        <Item>
+          <New class="org.mortbay.jetty.security.ConstraintMapping">
+            <Set name="constraint">
+              <New class="org.mortbay.jetty.security.Constraint">
+                <Set name="name">BASIC</Set>
+                <Set name="roles">
+                  <Array type="java.lang.String">
+                    <Item>user</Item>
+                    <Item>admin</Item>
+                    <Item>moderator</Item>
+                  </Array>
+                </Set>
+                <Set name="authenticate">true</Set>
+              </New>
+            </Set>
+            <Set name="pathSpec">/*</Set>
+          </New>
+        </Item>
+      </Array>
+    </Set>
+  </Get>
+</Configure>

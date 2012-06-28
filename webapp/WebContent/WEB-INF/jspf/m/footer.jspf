@@ -1,0 +1,6 @@
+<%@ page import="java.util.Date" %>
+<%@ page import="sagex.webserver.Version" %>
+<div class="footer">
+   <p>Page Generated <%= new Date() %></p>
+   <p>SageTV Mobile Web Interface Version <%= Version.CURRENT_VERSION.toString() %></p>
+</div>

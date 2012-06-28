@@ -1,0 +1,127 @@
+#!/bin/bash
+#
+# save current variables
+#
+cur_dir=`pwd`
+cur_path=$PATH
+cur_include_path=$C_INCLUDE_PATH
+cur_library_path=$LIBRARY_PATH
+cur_cflags=$CFLAGS
+cur_ldflags=$LDFLAGS
+
+# create install directory
+install_dir=/sagebuild-mingw32
+#install_dir=/c/sagebuild
+if [ ! -d $install_dir ]; then
+  mkdir $install_dir
+fi
+
+#
+# set variables
+#
+export CFLAGS="-I$install_dir/include -L$install_dir/lib"
+#export LDFLAGS="-L$install_dir/lib"
+#export C_INCLUDE_PATH=$install_dir/include:$C_INCLUDE_PATH
+#export LIBRARY_PATH=$install_dir/lib:$LIBRARY_PATH
+export PATH=$install_dir/bin:$PATH
+
+#
+# yasm dependency
+#
+#cd $cur_dir/yasm-1.0.1
+#make clean
+#./configure --prefix=$install_dir
+#make
+#make install
+
+#
+# libx264 dependency
+#
+#cd $cur_dir/x264-snapshot-20100801-2245
+#make clean
+#./configure --prefix=$install_dir
+#make
+#make install
+
+#
+# lame dependency
+#
+#cd $cur_dir/lame-3.98.4
+#make clean
+#./configure --prefix=$install_dir
+#make
+#make install
+
+#
+# faad dependency
+#
+#cd $cur_dir/faad2-2.7
+#make clean
+#./configure --prefix=$install_dir
+#make
+#make install
+
+#
+# faac dependency
+# won't build
+#cd $cur_dir/faac-1.28
+#make clean
+#./configure --prefix=$install_dir
+#make
+#make install
+
+#
+# xvid dependency
+#
+#cd $cur_dir/xvidcore-1.2.2/build/generic
+#make clean
+#./configure --prefix=$install_dir
+#make
+#make install
+
+#
+# ffmpeg
+#
+#echo $CFLAGS
+
+date
+#cd $cur_dir/ffmpeg-pure-airvideo
+#cd $cur_dir/ffmpeg-0.6
+#cd $cur_dir/ffmpeg-sage-7.0.13
+cd $cur_dir/ffmpeg-sage-7.0.13-and-segmenter-2.2.5
+chmod +x configure
+chmod +x version.sh
+make clean
+#./configure --prefix=$install_dir --arch=i686 --cpu=i686 --disable-mmx --enable-gpl --enable-libx264 --enable-static --disable-shared --enable-pthreads --enable-libmp3lame --enable-libfaad --disable-decoder=aac --extra-ldflags=-L$install_dir/lib
+#./configure --prefix=$install_dir --arch=i686 --cpu=i686 --enable-gpl --enable-libx264 --enable-static --disable-shared --enable-pthreads --enable-libmp3lame --enable-libfaad --enable-libfaac --extra-ldflags=-L$install_dir/lib
+#./configure --prefix=$install_dir --enable-gpl --enable-libx264 --enable-static --disable-shared --enable-pthreads --enable-libmp3lame --enable-libfaad --extra-ldflags=-L$install_dir/lib
+##sage
+#./configure --disable-ffserver --disable-ffplay --enable-gpl --enable-pthreads --enable-nonfree --enable-libfaac --enable-libx264 --enable-libxvid --disable-devices --disable-bzlib --prefix=/sage/bin/mplayerhq-sage/libs/ --extra-cflags=-I/sage/bin/mplayerhq-sage/libs/include --extra-ldflags=-L/sage/bin/mplayerhq-sage/libs/lib --disable-demuxer=msnwc_tcp
+#./configure --prefix=$install_dir --disable-ffserver --disable-ffplay --enable-gpl --enable-pthreads --enable-nonfree --enable-libfaac --enable-libx264 --enable-libxvid --disable-devices --disable-bzlib --extra-cflags=-I/$install_dir/include --extra-ldflags=-L/$install_dir/lib --disable-demuxer=msnwc_tcp
+
+#./configure --enable-memalign-hack --prefix=/mingw --target-os=mingw32 --arch=i686 --cpu=i686 --enable-gpl --enable-libx264 --enable-static --disable-shared --enable-pthreads --enable-libmp3lame --enable-libfaad --disable-decoder=aac
+
+#./configure --enable-memalign-hack --prefix=$install_dir --target-os=mingw32 --arch=i686 --cpu=i686 --enable-gpl --enable-libx264 --enable-static --disable-shared --enable-pthreads --enable-libmp3lame --enable-libfaad --disable-decoder=aac
+#./configure --enable-memalign-hack --prefix=$install_dir --arch=i686 --cpu=i686 --enable-gpl --enable-libx264 --enable-static --disable-shared --enable-pthreads --enable-libmp3lame --disable-decoder=aac
+
+##sage-linux
+#./configure --target-os=mingw32 --prefix=/cygdrive/c/dev/src/buildwin/stage --disable-ffplay --disable-ffserver --enable-gpl --enable-nonfree --disable-encoder=aac --disable-demuxer=ea --disable-devices --enable-libxvid --enable-libx264 --enable-libfaac --enable-static --disable-shared --enable-pthreads --disable-debug --enable-memalign-hack --arch=x86 --extra-cflags='-fno-common -march=i686-mtune=i686 -DWIN32 -I/cygdrive/c/dev/src/buildwin/stage/include' --extra-ldflags=-L/cygdrive/c/dev/src/buildwin/stage/lib --enable-cross-compile --cross-prefix=i686-pc-mingw32-
+#./configure --target-os=mingw32 --prefix=/c/sagebuild --disable-ffplay --disable-ffserver --enable-gpl --enable-nonfree --disable-encoder=aac --disable-demuxer=ea --disable-devices --enable-libxvid --enable-libx264 --enable-libfaac --enable-static --disable-shared --enable-pthreads --disable-debug --enable-memalign-hack --arch=x86 --extra-cflags='-fno-common -march=i686-mtune=i686 -DWIN32 -I/c/sagebuild/include' --extra-ldflags=-L/c/sagebuild/lib --enable-cross-compile --cross-prefix=i686-pc-mingw32-
+./configure --target-os=mingw32 --prefix=$install_dir --disable-ffplay --disable-ffserver --enable-gpl --enable-nonfree --disable-encoder=aac --disable-demuxer=ea --disable-devices --enable-libxvid --enable-libx264 --enable-libfaac --enable-static --disable-shared --enable-pthreads --disable-debug --enable-memalign-hack --arch=x86 --extra-cflags='-fno-common -march=i686-mtune=i686 -DWIN32 -I$install_dir/include' --extra-ldflags=-L$install_dir/lib --enable-cross-compile --cross-prefix=i586-mingw32msvc-
+
+#--extra-cflags=-I/usr/local/include --extra-ldflags=-L/usr/local/lib
+make
+make install
+date
+
+#cp $install_dir/bin/ffmpeg $cur_dir/../bin/win32
+
+#
+# reset variables
+#
+LDFLAGS=$cur_ldflags
+CFLAGS=$cur_cflags
+LIBRARY_PATH=$cur_library_path
+C_INCLUDE_PATH=$cur_include_path
+PATH=$cur_path
+cd $cur_dir

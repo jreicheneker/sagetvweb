@@ -1,0 +1,112 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sagecapdev" tagdir="/WEB-INF/tags/sage/api/capturedevice" %> 
+<%@ taglib prefix="sagecapdevinp" tagdir="/WEB-INF/tags/sage/api/capturedeviceinput" %> 
+<%@ taglib prefix="sagech" tagdir="/WEB-INF/tags/sage/api/channel" %> 
+<%@ taglib prefix="sagefav" tagdir="/WEB-INF/tags/sage/api/favorite" %> 
+<%@ taglib prefix="sagedb" tagdir="/WEB-INF/tags/sage/api/database" %> 
+<%@ taglib prefix="sagemf" tagdir="/WEB-INF/tags/sage/api/mediafile" %> 
+<%@ taglib prefix="sageshow" tagdir="/WEB-INF/tags/sage/api/show" %> 
+<%@ taglib prefix="sageair" tagdir="/WEB-INF/tags/sage/api/airing" %> 
+<%@ taglib prefix="sageglbl" tagdir="/WEB-INF/tags/sage/api/global" %> 
+<%@ taglib prefix="sageutil" tagdir="/WEB-INF/tags/sage/api/utility" %> 
+
+<%@ include file="contextpath.jspf"%>
+
+<%-- TODO clean up, share with conflictresolution.jsp --%>
+<sageglbl:GetAiringsThatWontBeRecorded var="allConflicts" onlyUnresolved="false"/>
+<sageglbl:GetAiringsThatWontBeRecorded var="unresolvedConflicts" onlyUnresolved="true"/>
+<sagedb:DataIntersection var="airingConflict" dataSet1="${airing}" dataSet2="${unresolvedConflicts}"/>
+
+<sagecapdev:GetConfiguredCaptureDeviceInputs var="configuredInputs"/>
+<sageair:GetChannel var="targetChannel" airing="${airing}"/>
+
+<%-- look for capture devices that could record this airing's channel --%>
+<c:forEach items="${configuredInputs}" var="configuredInput">
+   <sagecapdevinp:GetLineupForCaptureDeviceInput var="lineup" captureDeviceInput="${configuredInput}"/>
+   <sagech:IsChannelViewableOnLineup var="viewable" channel="${targetChannel}" lineup="${lineup}"/>
+   <c:if test="${viewable}">
+      <%-- get all scheduled recordings on this capture device during the time of the missed airing --%>
+      <sagecapdevinp:GetCaptureDeviceForInput var="captureDevice" captureDeviceInput="${configuredInput}"/>
+      <sageair:GetScheduleStartTime var="startTime" airing="${airing}"/>
+      <sageair:GetScheduleEndTime  var="endTime" airing="${airing}"/>
+      <sageglbl:GetScheduledRecordingsForDeviceForTime var="overlaps" captureDevice="${captureDevice}" startTime="${startTime}" stopTime="${endTime}"/>
+      <c:forEach items="${overlaps}" var="conflictingRecord">
+         <sageair:IsManualRecord var="isManual" airing="${conflictingRecord}"/>
+         <%--sagedb:DataUnion var="allOverlappingConflicts" dataSet1="${allOverlappingConflicts}" dataSet2="${conflictingRecord}"/--%>
+         <c:if test="${isManual}">
+            <sagedb:DataUnion var="conflictingManuals" dataSet1="${conflictingManuals}" dataSet2="${conflictingRecord}"/>
+         </c:if>
+         <sageair:IsFavorite var="isFavorite" airing="${conflictingRecord}"/>
+         <c:if test="${isFavorite and !isManual}">
+            <sagedb:DataUnion var="conflictingSingleFavorites" dataSet1="${conflictingSingleFavorites}" dataSet2="${conflictingRecord}"/>
+            <%--sagefav:GetFavoriteForAiring var="otherFavorite" airing="${conflictingRecord}"/>
+            <c:if test="${otherFavorite != missedFavorite}">
+               <sagedb:DataUnion var="conflictingFavorites" dataSet1="${conflictingFavorites}" dataSet2="${otherFavorite}"/>
+            </c:if--%>
+         </c:if>
+      </c:forEach>
+      <%-- get all conflicting recordings within the timerange of the missed airing that could be recorded on this capture device--%>
+      <%--c:forEach items="${allConflicts}" var="conflictingRecord">
+         <c:if test="${conflictingRecord != airing}">
+            <sageair:GetChannel var="channel" airing="${conflictingRecord}"/>
+            <sagech:IsChannelViewableOnLineup var="viewable" channel="${channel}" lineup="${lineup}"/>
+            <c:if test="${viewable}">
+               <sageair:GetScheduleStartTime var="conflictingRecordStartTime" airing="${conflictingRecord}"/>
+               <sageair:GetScheduleEndTime var="conflictingRecordEndTime" airing="${conflictingRecord}"/>
+               <sageair:GetScheduleStartTime var="missedAiringStartTime" airing="${airing}"/>
+               <sageair:GetScheduleEndTime var="missedAiringEndTime" airing="${airing}"/>
+               <c:if test="${conflictingRecordStartTime <= missedAiringEndTime and conflictingRecordEndTime >= missedAiringStartTime}">
+                  <sagedb:DataUnion var="allOverlappingConflicts" dataSet1="${allOverlappingConflicts}" dataSet2="${conflictingRecord}"/>
+                  < % - - sagefav:GetFavoriteForAiring var="otherFavorite" airing="${conflictingRecord}"/>
+                  <c:if test="${otherFavorite != missedFavorite}">
+                     <sagedb:DataUnion var="conflictingFavorites" dataSet1="${conflictingFavorites}" dataSet2="${otherFavorite}"/>
+                  </c:if - - % >
+               </c:if>
+            </c:if>
+         </c:if>
+      </c:forEach--%>
+   </c:if>
+</c:forEach>
+<sagedb:DataUnion var="conflictingShows" dataSet1="${conflictingSingleFavorites}" dataSet2="${conflictingManuals}"/>
+<%--sagedb:DataUnion var="conflictingShows" dataSet1="${conflictingShows}" dataSet2="${allOverlappingConflicts}"/--%>
+<%--sagedb:Sort var="conflictingShows" data="${conflictingShows}" descending="false" sortTechnique="GetChannelNumber"/>
+<sagedb:Sort var="conflictingShows" data="${conflictingShows}" descending="false" sortTechnique="GetScheduleStartTime"/--%>
+
+<sageutil:Size var="conflictingShowsSize" data="${conflictingShows}"/>
+<%--div class="section">
+   ${conflictingShowsSize} Conflicting Recording<c:if test="${conflictingShowsSize != 1}">s</c:if>
+</div--%>
+
+<p>
+   <%--form action="conflictresolution.jsp" method="get"--%>
+<c:url var="recordingDetailUrl" value="conflictresolution.jsp">
+   <c:param name="AiringId" value="${airingId}"></c:param>
+</c:url>
+
+      <c:choose>
+         <c:when test="${!empty airingConflict}"><%-- airing is an unresolved conflict --%>
+            <a href="${recordingDetailUrl}"><img src="${cp}/m/images/ConflictUnresolvedMobile.png"/>${conflictingShowsSize} Conflicting Recording<c:if test="${conflictingShowsSize != 1}">s</c:if></a>
+         </c:when>
+         <c:otherwise>
+            <sagedb:DataIntersection var="airingConflict" dataSet1="${airing}" dataSet2="${allConflicts}"/>
+            <c:if test="${!empty airingConflict}"><%-- airing is a resolved conflict --%>
+               <a href="${recordingDetailUrl}"><img src="${cp}/m/images/ConflictResolvedMobile.png"/>${conflictingShowsSize} Conflicting Recording<c:if test="${conflictingShowsSize != 1}">s</c:if></a>
+            </c:if>
+         </c:otherwise>
+      </c:choose>
+      <%--c:if test="${!empty airingConflict}">
+         <sageair:GetAiringID var="airingId" airing="${airing}"/>
+         < %--c:url var="conflictResolutionUrl" value="conflictresolution.jsp">
+            <c:param name="AiringId" value="${airingId}"></c:param>
+         </c:url--% >
+         <input type="hidden" name="AiringId" value="${airingId}"/>
+         <button>Resolve Conflicts</button>
+         < %--a href="${conflictResolutionUrl}">[Resolve Conflicts]</a--% >
+      </c:if--%>
+   <%--/form--%>
+</p>
+
+<%-- Remove variables that are involved in DataUnion operations --%>
+<c:remove var="conflictingManuals"/>
+<c:remove var="conflictingShows"/>
+<c:remove var="conflictingSingleFavorites"/>

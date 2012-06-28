@@ -1,0 +1,63 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sageair" tagdir="/WEB-INF/tags/sage/api/airing" %> 
+<%@ taglib prefix="sagefav" tagdir="/WEB-INF/tags/sage/api/favorite" %> 
+<%@ taglib prefix="sagemf" tagdir="/WEB-INF/tags/sage/api/mediafile" %> 
+
+<c:set var="airings" value="${requestScope.airingList}"/>
+
+<c:if test="${!empty airings}">
+   <c:forEach var="airing" items="${airings}" varStatus="status">
+      <sagemf:IsMediaFileObject var="isMediaFileObject" object="${airing}"/>
+
+      <c:if test="${isMediaFileObject}">
+         <%-- the current item is a media file --%>
+         <c:set var="mediaFile" value="${airing}"/>
+      </c:if>
+      <c:if test="${!isMediaFileObject}">
+         <%-- if the current item is an airing, get the tv file if it has one --%>
+         <sageair:GetMediaFileForAiring var="mediaFile" airing="${airing}"/>
+         <c:set var="isAiring" value="true"/>
+      </c:if>
+
+      <c:if test="${!empty mediaFile}">
+         <%-- either the current item is a media file, or it's an airing with an associated media (tv) file --%>
+         <c:set var="isAiring" value="false"/>
+         <sagemf:IsTVFile var="isTVFile" mediaFile="${mediaFile}"/>
+         <sagemf:IsLibraryFile var="isLibraryFile" mediaFile="${mediaFile}"/>
+         <sagemf:IsVideoFile var="isVideoFile" mediaFile="${mediaFile}"/>
+         <sagemf:IsMusicFile var="isMusicFile" mediaFile="${mediaFile}"/>
+         <sagemf:IsPictureFile var="isPictureFile" mediaFile="${mediaFile}"/>
+         <sagemf:GetMediaFileID var="mediaFileId" mediaFile="${mediaFile}"/>
+      </c:if>
+
+      <sagefav:IsFavoriteObject var="isFavorite" favorite="${airing}"/>
+
+      <c:choose>
+         <c:when test="${isFavorite}">
+            <%@ include file="favoritecell.jspf" %>
+         </c:when>
+         <c:when test="${isAiring}">
+            <%@ include file="airingcell.jspf" %>
+         </c:when>
+         <c:when test="${isTVFile}">
+            <%@ include file="tvcell.jspf" %>
+         </c:when>
+         <c:when test="${isVideoFile}">
+            <%-- %@ include file="videocell.jspf" --%>
+            <sagemf:GetMediaTitle var="mediaTitle" mediaFile="${mediaFile}"/>
+            Video File: ${mediaTitle}
+         </c:when>
+         <c:when test="${isMusicFile}">
+            <%-- %@ include file="musiccell.jspf" --%>
+            Music File
+         </c:when>
+         <c:when test="${isPictureFile}">
+            <%-- %@ include file="picturecell.jspf" --%>
+            Picture File
+         </c:when>
+         <c:otherwise>
+            Unknown
+         </c:otherwise>
+      </c:choose>
+   </c:forEach>
+</c:if>

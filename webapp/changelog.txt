@@ -1,0 +1,59 @@
+2.1.0 March 6, 2011
+  - Mobile Web Remote (contributed by forum user PiX64!)
+  - Add System Messages section to Home page
+  - Store client, extender, and placeshifter descriptive names in Sage.properties
+  - Edit client, extender, and placeshifter descriptive names from mobile web interface (click on the context in the home page to go to the client/extender details page)
+  - Fix display of actual recording times in recording lists and detailed info page
+  - Fix First Run/ReRun info on detailed info page
+  - Don't identify Android browsers as Safari (both are based on WebKit)
+  - Show message on recordings page if no recordings exist
+2.0.0 November 7, 2010
+  - SageTV v7-style interface (switch from blue to gray as well as other style changes)
+  - Convert TV recordings in real time and watch on iPhone, iPod touch, and iPad
+  - Support latest watched time when starting and suspending viewing on iPhone, iPod touch, and iPad
+  - Start playback of TV recordings on extenders, placeshifters, and clients
+  - Convert all images to support transparency (may display strangely on older mobile browsers)
+  - Improved font handling when switching between portrait and landscape modes on iPhone, iPod touch, and iPad
+  - Fixed HTML to make CSS styling easier
+  - View what's playing on SageTV Clients
+  - Change max number of hours in TV listings from 12 to 24
+1.4.1 July 17, 2010
+  - Fixed error 'mobile_menu.json (The system cannot find the path specified)'
+1.4.0 July 17, 2010
+  - Don't hard-code resource path of mobile_menu.json
+  - Close mobile_menu.json file reader
+  - Convert end-of-line characters from LF (Linux) to CRLF (Windows) for the /apps files.
+  - Regenerated tag library for SageTV v7 API
+  - View what's playing on SageTV Clients from the home page
+  - Favorite Automatic Conversions
+  - Increase maximum for Favorite Keep at Most from 15 to 63
+  - Adopt conventions for /apps application  
+  - Remember last values for video conversions
+1.3
+  - Support for SageTV Plugin Manager
+1.2 August 2, 2009
+  - Changed context path to /sagem
+  - System Messages (requires SageTV 6.5.17 or later)
+  - Multi-channel favorites
+  - Support for Jetty Starter plugin version 1.6 custom mime types 
+  - Remove dependency on nielm's webserver
+  - Make sure show title is in combo box when adding a favorite
+  - Recordings were not scheduled for a new favorite with a selected channel
+  - Fixed 'Recording Now' image link on recording details page
+1.1 January 30, 2009
+  - Search for airings
+  - Customizable menu
+  - Multiple selection of airings and recordings
+  - Add search string to [link] URL on search pages
+  - Add show description to lists of airings and recordings
+  - Improve confirmation for deletion of recordings and favorites
+  - Fix links in pages to support reverse proxies
+  - Add category, rating, extended rating, year, and misc fields to search pages
+1.0.1 December 14, 2008
+  - Fix exception casting java.lang.Integer to java.lang.Long when scheduling a manual recording that causes conflicts. 
+  - Fix formatting of manual recording conflict page.
+  - Fix error message for invalid airing id on conflict resolution page.
+  - Change order of welcome file list to put menu.jsp first.  (If the user enters a URL without a file name at the end,
+    the server will look for menu.jsp first, followed by home.jsp, and finally index.jsp.)
+1.0 November 23, 2008
+  - First Release

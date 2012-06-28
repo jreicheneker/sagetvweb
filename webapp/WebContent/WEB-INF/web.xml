@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+    <display-name>SageTV Mobile Web Interface</display-name>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/m/error.jsp</location>
+    </error-page>
+    <!--servlet>
+        <description></description>
+        <display-name>Channel Logo</display-name>
+        <servlet-name>ChannelLogo</servlet-name>
+        <servlet-class>net.sf.sageplugins.webserver.ChannelLogoServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ChannelLogo</servlet-name>
+        <url-pattern>/ChannelLogo</url-pattern>
+    </servlet-mapping-->
+    <servlet>
+        <description></description>
+        <display-name>Media File</display-name>
+        <servlet-name>MediaFile</servlet-name>
+        <servlet-class>sagex.webserver.servlet.MediaFileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MediaFile</servlet-name>
+        <url-pattern>/MediaFile</url-pattern>
+    </servlet-mapping>
+    <!--servlet>
+        <description></description>
+        <display-name>Playlist Generator</display-name>
+        <servlet-name>PlaylistGenerator</servlet-name>
+        <servlet-class>net.sf.sageplugins.webserver.PlaylistGeneratorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PlaylistGenerator</servlet-name>
+        <url-pattern>/PlaylistGenerator</url-pattern>
+    </servlet-mapping-->
+    <servlet>
+        <description></description>
+        <display-name>Media File Thumbnail</display-name>
+        <servlet-name>MediaFileThumbnail</servlet-name>
+        <servlet-class>sagex.webserver.servlet.MediaFileThumbnailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MediaFileThumbnail</servlet-name>
+        <url-pattern>/MediaFileThumbnail</url-pattern>
+    </servlet-mapping>
+
+<!--
+# public path to MediaFile servlet for media players that do not prompt
+# for usernames/passwords... This is a minor security risk, but an 
+# attacker would have to know the exact URL, and the arguments, 
+# and then have to guess mediafile IDs from a range of 0-999999999!
+# and then, all they will be able to do is download a file!
+-->
+    <!--servlet>
+        <description></description>
+        <display-name>Public Media File</display-name>
+        <servlet-name>Public MediaFile</servlet-name>
+        <servlet-class>net.sf.sageplugins.webserver.MediaFileServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Public MediaFile</servlet-name>
+        <url-pattern>/sagepublic/MediaFile</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description></description>
+        <display-name>Public Playlist Generator</display-name>
+        <servlet-name>Public PlaylistGenerator</servlet-name>
+        <servlet-class>net.sf.sageplugins.webserver.PlaylistGeneratorServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Public PlaylistGenerator</servlet-name>
+        <url-pattern>/sagepublic/PlaylistGenerator</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description></description>
+        <display-name>Media File Transcode</display-name>
+        <servlet-name>MediaFileTranscode</servlet-name>
+        <servlet-class>net.sf.sageplugins.webserver.MediaFileTranscodeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MediaFileTranscode</servlet-name>
+        <url-pattern>/MediaFileTranscode</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <description></description>
+        <display-name>Resized Image</display-name>
+        <servlet-name>ResizedImage</servlet-name>
+        <servlet-class>net.sf.sageplugins.webserver.ResizedImageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ResizedImage</servlet-name>
+        <url-pattern>/ResizedImage</url-pattern>
+    </servlet-mapping-->
+
+<!--
+# public path to RSS servlet: some RSS readers cannot handle authentication
+# and you don't really want to send your webserver user/pass to 
+# web based RSS aggregators do you?!
+-->
+    <!--servlet>
+        <description></description>
+        <display-name>Public Rss</display-name>
+        <servlet-name>Public Rss</servlet-name>
+        <servlet-class>net.sf.sageplugins.webserver.RssServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Public Rss</servlet-name>
+        <url-pattern>/sagepublic/Rss</url-pattern>
+    </servlet-mapping-->
+
+    <!--servlet>
+        <description></description>
+        <display-name>RtspServlet</display-name>
+        <servlet-name>RtspServlet</servlet-name>
+        <servlet-class>sagex.webserver.servlet.RtspServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>RtspServlet</servlet-name>
+        <url-pattern>/RtspServlet</url-pattern>
+    </servlet-mapping-->
+
+    <servlet>
+        <description></description>
+        <display-name>Mobile Command</display-name>
+        <servlet-name>MobileCommand</servlet-name>
+        <servlet-class>sagex.webserver.servlet.CommandServlet</servlet-class>
+        <init-param>
+            <param-name>Command Applied Page</param-name>
+            <param-value>/m/commandapplied.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Command Error Page</param-name>
+            <param-value>/m/commanderror.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Command Canceled Page</param-name>
+            <param-value>/m/commandcanceled.jsp</param-value>
+        </init-param>
+        <init-param>
+            <param-name>Command Confirmation Page</param-name>
+            <param-value>/m/confirm.jsp</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MobileCommand</servlet-name>
+        <url-pattern>/m/Command</url-pattern>
+    </servlet-mapping>
+
+    <!-- Filter that compresses pages.  Useful to decrease the number
+         of bytes transferred to a mobile device for speed and cost (many people
+         pay by the kilobyte).
+      -->
+    <filter>
+        <filter-name>CompressingFilter</filter-name>
+        <!--filter-class>sagex.jetty.filters.CompressionFilter</filter-class-->
+        <filter-class>org.mortbay.servlet.GzipFilter</filter-class>
+        <!--init-param>
+            <param-name>includeContentTypes</param-name>
+            <param-value>text/html</param-value>
+        </init-param-->
+        <init-param>
+            <param-name>mimeTypes</param-name>
+            <param-value>text/html,text/css</param-value>
+        </init-param>
+        <init-param>
+            <param-name>excludeContentTypes</param-name>
+            <param-value>video/*</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CompressingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <welcome-file-list>
+        <welcome-file>menu.jsp</welcome-file>
+        <welcome-file>home.jsp</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="SageTV Web App" default="makezip">
+
+   <target name="makewar">
+   	  <mkdir dir="dist"/>
+      <delete file="dist/SageWebApp.war"/>
+      <war basedir="WebContent"
+           destfile="dist/SageWebApp.war"
+           manifest="WebContent/META-INF/MANIFEST.MF"
+           webxml="WebContent/WEB-INF/web.xml">
+         <classes dir="build/classes">
+             <exclude name="sagex/apix/**"/>
+      	 </classes>
+         <!--classes dir="../JettyStarter/bin" includes="net/sf/sageplugins/jetty/filter/**/*"/-->
+      	 <!--exclude name="WEB-INF/lib/pjl-comp-filter-1.6.6.jar"/-->
+     	 <!--exclude name="WEB-INF/tags/sage-*/**"/-->
+    	 <!--exclude name="WEB-INF/tags/sage/api/album/**"/>
+         <exclude name="WEB-INF/tags/sage/api/mediaplayer/**"/>
+         <exclude name="WEB-INF/tags/sage/api/playlist/**"/>
+         <exclude name="WEB-INF/tags/sage/api/seriesinfo/**"/>
+         <exclude name="WEB-INF/tags/sage/api/tveditorial/**"/-->
+    	 <!--exclude name="WEB-INF/libpjl/**"/>
+         <exclude name="data/**"/>
+         <exclude name="css/**"/>
+         <exclude name="js/**"/-->
+         <!--exclude name="js/dojo-release-1.0.2/**/*"/>
+         <exclude name="js/imageflow-0.8/**/*"/>
+         <exclude name="js/reflection-1.7/**/*"/>
+         <exclude name="js/reflex-1.2/**/*"/-->
+         <!--exclude name="themes/**"/-->
+      </war>
+   </target>
+
+   <target name="makezip" depends="makewar">
+      <delete file="dist/SageWebApp.zip"/>
+      <zip destfile="dist/SageWebApp.zip">
+         <zipfileset file="contexts/sagewebapp.xml" prefix="jetty/contexts"/>
+         <zipfileset file="dist/SageWebApp.war" prefix="jetty/webapps"/>
+      </zip>
+      <delete file="dist/SageWebApp.war"/>
+   </target>
+
+   <!-- test, check in, label source, build, create new release on sourceforge, and upload to sourceforge -->
+	<!-- TODO test, check in, tag with version, update wiki, build, create release, deploy zip file to sourceforge, update Sage forums download page --> 
+
+</project>

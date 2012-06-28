@@ -1,0 +1,74 @@
+2.3.0 April 23, 2011
+  - Remove Ant JAR from this download and instead rely on the Ant plugin dependency
+2.2.1 March 5, 2011
+  - Change logging from stderr to stdout.  It appears something else is hijacking stderr.
+  - Add logging about classloader and temporary web app directory
+2.2.0 January 15, 2011
+  - Minor apps web page formatting changes
+  - Add user to the 'user' role if none specified in realm.properties
+  - Fix displayed version of installed plugin
+2.1.0 January 3, 2011
+  - SageTV v7-style interface for 'apps' web application (switch from blue to gray as well as other style changes)
+  - Remove duplicate timestamps on Jetty's log entries in the SageTV log file.
+  - Override Jetty's war file extraction logic to address HTTP 404 and 503 errors.
+2.0.1 May 31, 2010
+  - Fix Windows file-locking issue
+  - Display message on /apps page when no web applications are installed
+  - Convert end-of-line characters from LF (Linux) to CRLF (Windows) for the /apps files.
+2.0 May 28, 2010
+  - Support for SageTV 7 Plugin Manager
+    - Configuration options for port numbers, display web server URLs, SSL, default username and password, logging level, and UPnP router configuration
+    - Mark modified properties to indicate when web server restart is required.
+    - Restart Jetty
+    - Move properties from JettyStarter.properties to Sage.properties
+    - Preserve realm.properties
+    - Obfuscate the password stored in realm.properties
+  - Added SageTV Web Applications webapp as a Jetty home page.
+  - Empty jetty/* folders were missing from download
+  - Fix debug logging, add new property for log level
+  - Log web application startup errors. 
+  - Increase maximum HTML form size to support Google Web Toolkit applications.
+  - Don't overwrite realm.properties when installed from plugin manager
+  - Deliver updated default mime types in jetty/etc/mime.types.
+  - Log web application startup exception
+  - Fix HTTP 503 error when accessing items in the root context ('/').
+1.6 July 26, 2009
+  - Upgrade Jetty from 6.1.11 to 6.1.19
+  - Support user-specified mime types
+  - Rewrite /sagepublic to /sage/public
+  - Deliver jetty-ajp.xml and jetty-ajp.jar for Apache integration (unsupported)
+1.5 January 17, 2009
+  - Serve static files from the jetty/static directory.  Required for the crossdomain.xml file for
+    shadeblue's remote control.
+  - Convert end-of-line characters from LF (Linux) to CRLF (Windows).  Most people use the Windows
+    platform plus Linux editors handle the Windows format better than Windows Notepad handles the
+    Linux format.
+  - Expose version number
+1.4 October 18, 2008
+  - Change package names from net.sf.sageplugins.* to sagex.*
+  - Provide access to Jetty configuration objects.  Provides APIs for web applications to find
+    server, port, etc. 
+  - HTTP compression headers were set even when compression filter streams were not used.  This
+    happened when an invalid URL was requested and an HTTP 404 response was sent by Jetty.  On the
+    client, the browser displayed a message about invalid compression rather than an HTTP 404 error.
+  - Ensure HTTP compression headers are set.  Somehow they are not always preserved after the filter
+    chain finishes, and the client will display garbage in the window.
+1.3 August 3, 2008
+  - Fix NullPointerException when a resource is cached on the client (HTTP 304 Not Modified)
+    and does not need to be downloaded 
+  - Add SSL properties to JettyStarter.properties and jetty-ssl.xml
+  - Add Jetty and JettyStarter plugin licenses
+  - Add documentation to JettyStarter.properties
+  - Upgrade Jetty from 6.1.7 to 6.1.11
+1.2 June 12, 2008
+  - Replace third-party compression filter with custom filter.  Fixes issue where the browser
+    displayed binary data for some pages. 
+1.1 June 8, 2008
+  - Remove quotes from jetty.logs setting in JettyStarter.properties
+  - Add jetty.host, jetty.port, and jetty.ssl.port properties to JettyStarter.properties
+1.0.02 June 4, 2008
+  - Support paths with spaces in JettyStarter.properties jetty.configfiles setting
+1.0.01 June 3, 2008
+  - Recompiled for Java 1.5
+1.0 June 1, 2008
+  - First Release

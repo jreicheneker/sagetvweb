@@ -1,0 +1,63 @@
+sagetv@blackbird:/opt/sagetv/server$ ./jetty/webapps/SageStreaming/webapp/WEB-INF/bin/ffmpeg -version
+FFmpeg version UNKNOWN, Copyright (c) 2000-2010 Fabrice Bellard, et al.
+  built on Jul  6 2010 22:33:52 with gcc 4.4.3
+  configuration: --prefix=/home/jreichen/SageTV/SageStreaming/src-airvideo/installpath --arch=i686 --cpu=i686 --enable-gpl --enable-libx264 --enable-static --disable-shared --enable-pthreads --enable-libmp3lame --enable-libfaad --disable-decoder=aac --extra-ldflags=-L/home/jreichen/SageTV/SageStreaming/src-airvideo/installpath/lib
+  libavutil     50. 8. 0 / 50. 8. 0
+  libavcodec    52.52. 0 / 52.52. 0
+  libavformat   52.50. 0 / 52.50. 0
+  libavdevice   52. 2. 0 / 52. 2. 0
+  libswscale     0.10. 0 /  0.10. 0
+FFmpeg UNKNOWN
+libavutil     50. 8. 0 / 50. 8. 0
+libavcodec    52.52. 0 / 52.52. 0
+libavformat   52.50. 0 / 52.50. 0
+libavdevice   52. 2. 0 / 52. 2. 0
+libswscale     0.10. 0 /  0.10. 0
+sagetv@blackbird:/opt/sagetv/server$ ./ffmpeg 
+FFmpeg version SVN-r67, Copyright (c) 2000-2009 Fabrice Bellard, et al.
+  configuration: --disable-ffserver --disable-ffplay --enable-gpl --enable-pthreads --enable-libfaad --enable-libfaac --enable-libx264 --enable-libxvid --disable-devices --disable-bzlib --prefix=/sage/bin/mplayerhq-sage/libs/ --extra-cflags=-I/sage/bin/mplayerhq-sage/libs/include --extra-ldflags=-L/sage/bin/mplayerhq-sage/libs/lib --disable-demuxer=msnwc_tcp
+  libavutil     50. 2. 0 / 50. 2. 0
+  libavcodec    52.22. 3 / 52.22. 3
+  libavformat   52.32. 0 / 52.32. 0
+  libavdevice   52. 1. 0 / 52. 1. 0
+  libswscale     0. 7. 1 /  0. 7. 1
+  built on Jul 14 2010 16:22:41, gcc: 4.4.3
+At least one output file must be specified
+sagetv@blackbird:/opt/sagetv/server$ Write failed: Broken pipe
+jreichen@intrepid:/media$ ssh sagetv@192.168.25.102
+sagetv@192.168.25.102's password:                                                                                 
+Linux blackbird 2.6.32-22-generic #35-Ubuntu SMP Tue Jun 1 14:17:36 UTC 2010 i686 GNU/Linux                       
+Ubuntu 10.04 LTS                                                                                                  
+                                                                                                                  
+Welcome to Ubuntu!                                                                                                
+ * Documentation:  https://help.ubuntu.com/                                                                       
+                                                                                                                  
+  System information as of Sun Aug  1 19:39:21 MDT 2010                                                           
+                                                                                                                  
+  System load: 0.02               Memory usage: 50%   Processes:       179                                        
+  Usage of /:  74.7% of 24.04GB   Swap usage:   4%    Users logged in: 1                                          
+                                                                                                                  
+  => /media/sda1 is using 93.5% of 465.63GB                                                                       
+  => /media/sdb1 is using 86.8% of 233.64GB                                                                       
+                                                                                                                  
+  Graph this data and manage this system at https://landscape.canonical.com/                                      
+                                                                                                                  
+You have mail.                                                                                                    
+Last login: Sat Jul 31 21:31:05 2010 from intrepid.local                                                          
+cdsagetv@blackbird:~$ cd /opt/sagetv/server                                                                       
+sagetv@blackbird:/opt/sagetv/server$ ./jetty/webapps/SageStreaming/webapp/WEB-INF/bin/ffmpeg -version 
+FFmpeg version 0.6, Copyright (c) 2000-2010 the FFmpeg developers                                                 
+  built on Aug  1 2010 19:31:16 with gcc 4.4.3                                                                    
+  configuration: --prefix=/sagebuild --arch=i686 --cpu=i686 --disable-mmx --enable-gpl --enable-libx264 --enable-static --disable-shared --enable-pthreads --enable-libmp3lame --enable-libfaad --disable-decoder=aac --extra-ldflags=-L/sagebuild/lib                                                                                                
+  libavutil     50.15. 1 / 50.15. 1                                                                               
+  libavcodec    52.72. 2 / 52.72. 2
+  libavformat   52.64. 2 / 52.64. 2
+  libavdevice   52. 2. 0 / 52. 2. 0
+  libswscale     0.11. 0 /  0.11. 0
+FFmpeg 0.6
+libavutil     50.15. 1 / 50.15. 1
+libavcodec    52.72. 2 / 52.72. 2
+libavformat   52.64. 2 / 52.64. 2
+libavdevice   52. 2. 0 / 52. 2. 0
+libswscale     0.11. 0 /  0.11. 0
+sagetv@blackbird:/opt/sagetv/server$ 

@@ -1,0 +1,598 @@
+body {
+   font: 9pt 'Verdana', 'Arial','Helvetica';
+   text-shadow: rgba(0, 0, 0, 0.7) 1px 1px 0;
+   background-color: #606060;
+   color: #FFFFFF;
+   margin: 0px;
+   overflow-x: hidden;
+   -webkit-user-select: none;
+   -webkit-text-size-adjust: none;
+}
+
+p {
+   margin: 4px 0px 0px 0px;
+   word-wrap: break-word;
+}
+
+a {
+   color: #FFFFFF;
+   text-decoration: none;
+}
+a:visited {
+   color: #FFFFFF;
+   text-decoration: none;
+}
+a:hover, a:focus {
+   color: #ffd800; /* yellow */
+   text-decoration: underline;
+}
+
+/*tr td {
+   border-bottom: 1px solid;
+}*/
+/*table, tr, td {
+    cellpadding: 0px;
+    cellspacing: 0px;
+}*/
+
+button {
+    font-family: Arial, Tahoma, "lucida console", sans-serif;
+    font-size: 16px;
+    text-align: center;
+    text-shadow: #606060 1px 1px 0;
+    background-color: #0F0F0F;
+    color: #FFFFFF;
+    margin: 2px;
+    padding: 6px 4px 6px 4px;
+    border: 2px solid #FFFFFF;
+    border-radius: 10px;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    box-shadow: 3px 3px 3px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+    -moz-box-shadow: 3px 3px 3px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+    -webkit-box-shadow: 3px 3px 3px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+}
+
+td button {
+    /*
+     * Buttons in tables should all be the same width.  This is used
+     * in the 'Options' section of details.jsp.
+     */
+    width: 100%;
+}
+
+button:hover, button:focus {
+    text-decoration: none;
+    /* same color as the bottom of the gradient since html/css can't stretch background images? */
+    background-color: #505050
+    color: #ffd800;
+    border: 2px solid #ffd800;
+    /* gradient background when a button is selected */
+    /*background-image: url(../images/ButtonBgMobile.png);*/
+    /*background-repeat: repeat-x;*/
+}
+
+button:active {
+    background-color: #3C3C3C;
+	color: #998200;
+    padding: 7px 3px 5px 5px;
+	border: 2px solid #998200;
+    box-shadow: 1px 1px 1px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+    -moz-box-shadow: 1px 1px 1px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+    -webkit-box-shadow: 1px 1px 1px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+}
+
+select {
+    font-family: Arial, Tahoma, "lucida console", sans-serif;
+    font-size: 14px;
+    background-color: #0F0F0F;
+    color: #FFFFFF;
+    margin: 0;
+    padding: 2px;
+    border: 2px solid #FFFFFF;
+    box-shadow: 3px 3px 3px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+    -moz-box-shadow: 3px 3px 3px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+    -webkit-box-shadow: 3px 3px 3px rgba(15, 15, 15, 0.7); /* #0F0F0F */
+}
+
+td select {
+    /*
+     * Drop down boxes in tables should all be the same width.
+     */
+    width: 100%;
+}
+
+select:hover, select:focus {
+    text-decoration: underline;
+    background-color: #505050;
+    color: #ffd800;
+    border: 2px solid #ffd800;
+}
+
+option {
+    font-weight: bold;
+}
+
+/* todo radio and check box
+input {
+    font-family: Arial, Tahoma, "lucida console", sans-serif;
+    font-size: 10pt;
+    margin: 0;
+    / *padding: 0;* /
+    / *text-align: center;* /
+    / *background-color: #FFFFFF;
+    color: #000060;* /
+    color: #FFFFFF;
+    background-color: #000060; / * #042360 * /
+    / *border: 1px solid #FFFFFF;* /
+    border: 2px solid #FFFFFF;
+    / *border: none;* /
+    padding: 2px;
+}*/
+
+img {
+    vertical-align: middle;
+	border: 0px none;
+/*    -webkit-box-reflect: below 5px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.75, transparent), to(white));*/
+}
+
+.header {
+    border-bottom: 3px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+.subheader {
+	font-size: 16px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-bottom: 3px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+.titlebar {
+	height: 40px;
+    text-align: center;
+    vertical-align: middle;
+    background-image: url(../images/HeaderBgMobile.png);
+    background-repeat: repeat-x;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 1.0);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 1.0);
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 1.0);
+}
+
+.titlebar img, .titlebar a {
+    vertical-align: middle;
+}
+
+.titlebar .logo {
+    margin-top: 5px;
+}
+
+.header .title {
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.indicators {
+    text-align: center;
+    vertical-align: middle;
+    padding-top: 10px;
+/*    background-image: url(../images/DividerBgMobile.png);
+    background-repeat: repeat-x;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;*/
+}
+
+.footer {
+    font-size: 12px;
+    padding: 5px;
+    border: none;
+}
+
+.content {
+    font-size: 16px;
+    margin-bottom: 0px;
+    padding: 0px;
+    border-bottom: 3px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+.details {
+    font-size: 14px;
+    margin: 0;
+    padding: 3px 3px 3px 10px;
+    border: none;
+}
+
+/*.details .title, */
+.content .title {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 3px;
+}
+
+.videothumb {
+    margin: 10px 0px 0px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+}
+
+.imgthumb {
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    box-shadow: 0px 0px 10px #000000;
+    -moz-box-shadow: 0px 0px 10px #000000;
+    -webkit-box-shadow: 0px 0px 10px #000000;
+}
+
+hr {
+    margin: 1px 0px 1px 0px;
+	padding: 0px;
+    border-bottom: 2px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+.listings {
+    font-size: 12px;
+}
+
+/*.listings table {
+    background: transparent;
+}*/
+
+.listings .channelcell {
+    text-align: center;
+    border: 1px solid #FFFFFF;
+}
+
+.listings .showcell {
+	border: 1px solid #FFFFFF;
+}
+
+.listings .optionstitle {
+    border-bottom: 1px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+.listings .optionsbody {
+	border-bottom: 2px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+.listings .title {
+    font-size: 14px;
+    margin: 0px;
+    padding: 0px;
+}
+
+#overlay {
+    position: absolute;
+    margin: 10px 0px 0px 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+    -moz-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+    -webkit-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+
+/*
+ * .label and .value format label/value pairs on pages such as
+ * favoritedetails.jsp.  The label is bold, while the value
+ * is on the next line and slightly indented below the label.
+ */
+.label {
+    font-weight: bold;
+    font-size: 14px;
+	margin: 5px 0px 2px 0px;
+}
+
+.value {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+/*
+ *
+ */
+.section {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: center;
+    line-height: 29px;
+    background-color: #434343;
+    color: #FFFFFF;
+    margin: 5px 5px 0px 5px;
+    padding: 2px;
+    border: 1px solid #878787;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    background-image: url(../images/DividerBgMobile.png);
+    background-repeat: repeat-x;
+}
+
+/*.gloss {
+    background-image: url(../images/DividerBgMobiley.png);
+}*/
+
+.sectionbody {
+    margin-left: 5px;
+    margin-right: 5px;
+	padding: 5px;
+}
+
+.optionstitle {
+    font-size: 18px;
+    font-weight: bold;
+    vertical-align: center;
+    text-align: left;
+    color: #FFFFFF;
+    margin: 0px;
+    padding: 10px 3px 10px 3px;
+    border-bottom: 1px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+    /*background-image: url(../images/OptionsBgMobile.png);
+    background-repeat: repeat-x;*/
+}
+
+.optionsbody {
+    padding: 3px 3px 3px 5px;
+}
+
+.divider {
+    font-size: 16px;
+	font-weight: bold;
+	color: #FFFFFFF;
+    margin-top: 6px;
+    margin-bottom: 0px;
+    padding-top: 0px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #FFFFFF;
+    /*background-image: url(../images/OptionsBgMobile.png);
+    background-repeat: repeat-x;*/
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+.dividerbody {
+    font-size: 14px;
+    margin-bottom: 6px;
+    padding: 3px 3px 3px 10px;
+}
+
+.paddingbody .qualitybody {
+    padding: 10px;
+    border: 3px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+/*
+ * Items on the home page don't use their own border.  It helps with
+ * layout so airings can be laid out directly under their dividers
+ * (encoder, extender, etc.).
+ */
+.dividerbody .listcell {
+    border: none;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+/*.menucontainer*/
+.menu {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 29px;
+    text-align: left;
+    vertical-align: center;
+    background-color: #434343;
+    color: #FFFFFF;
+    padding: 2px 2px 2px 10px;
+    border: 1px solid #878787;
+    background-image: url(../images/DividerBgMobile.png);
+    background-repeat: repeat-x;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+}
+
+.menuimage {
+    width: 35px;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.menuitem {
+    font-size: 18px;
+    line-height: 30px;
+    border-bottom: #A0A0A0;
+}
+
+/*
+ *
+ */
+.listcell {
+    font-size: 14px;
+    color: #FFFFFF;
+    margin: 2px 0px 2px 0px;
+    padding: 5px;
+    border-bottom: 2px solid #FFFFFF;
+    box-shadow: 0px 1px 0px #000000;
+    -moz-box-shadow: 0px 1px 0px #000000;
+    -webkit-box-shadow: 0px 1px 0px #000000;
+}
+
+.listcell .title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+    padding: 0px;
+}
+
+.simplemessage {
+	padding: 5px;
+}
+
+.systemmessagetext {
+    margin-left: 10px;
+    margin-top: 5px;
+	padding: 2px;
+    border: 1px solid #FFFFFF;
+}
+
+/*
+ * Start: Recording Options
+ */
+.favorite {
+    border-color: white;
+}
+
+.watched {
+     font-style: italic;
+}
+
+.dontlike {
+    border-color: black;
+}
+
+.manualrecord {
+    border-color: red;
+}
+
+.recording {
+    border-color: #ffd800;
+}
+/*
+ * End: Recording Options
+ */
+
+/*
+ * Start: Show Categories
+ * Styles can be added for other categories by creating a new style
+ * starting with '.category_', followed by the name of the category.
+ * All spaces should be removed.  Past items can have styles by
+ * adding '_past' to the category name. 
+ */
+.category_other {
+    background: transparent;
+}
+
+.category_other_past {
+    background: rgba(0, 0, 0, 0.3);
+}
+
+.category_news {
+    background: #596627;
+}
+
+.category_news_past {
+    background: #32443e;
+}
+
+.category_sports,
+.category_sportsevent,
+.category_sportsnonevent,
+.category_sportstalk {
+    background: #12604a;
+}
+
+.category_sports_past,
+.category_sportsevent_past,
+.category_sportsnonevent_past,
+.category_sportstalk_past {
+    background: #0b425d;
+}
+
+.category_movie {
+    background: #703c88;
+}
+
+.category_movie_past {
+    background: #403580;
+}
+
+.category_sitcom {
+    background: #a6480a;
+}
+
+.category_sitcom_past {
+    background: #6a3009;
+}
+/*
+ * End: Show Categories
+ */
+
+ 
+ 
+ 
+ 
+/** status states **/
+#status {
+  position: absolute;
+  z-index: 2; top: 260px; left: 330px;
+}
+#status.clicktoplay:before {  
+  content: "CLICK TO PLAY";    
+}
+#status.progress:before {  
+  content: url(../images/spinner.gif);
+  position: absolute;
+  left: 82px;
+  top: -12px;  
+}
+#status.error:before { 
+  content: "OH NO! ERROR!";    
+  color: yellow;
+}
+
+/** showing and hidden states **/
+#overlay.showing {
+  opacity: 1.0;
+}
+.showing {
+  opacity: 0.8;
+  position: absolute;
+  z-index: 1;
+}
+.hidden {
+  opacity: 0;
+  position: absolute;
+  z-index: -1;
+}
+
+/** animations to fade out the overlay image and "Click To Play" button **/
+#overlay, #status {
+  -webkit-transition-property: opacity, z-index;
+  -webkit-transition-duration: 0.8s, 0s;
+  -webkit-transition-delay: 0, 2s;
+}

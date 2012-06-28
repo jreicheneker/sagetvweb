@@ -1,0 +1,40 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sagedb" tagdir="/WEB-INF/tags/sage/api/database" %> 
+<%@ taglib prefix="sageglbl" tagdir="/WEB-INF/tags/sage/api/global" %> 
+<%@ taglib prefix="sageutil" tagdir="/WEB-INF/tags/sage/api/utility" %> 
+
+<%@ include file="contextpath.jspf"%>
+
+<sageglbl:GetAiringsThatWontBeRecorded var="allConflicts" onlyUnresolved="false"/>
+<sageglbl:GetAiringsThatWontBeRecorded var="unresolvedConflicts" onlyUnresolved="true"/>
+<sagedb:DataIntersection var="airingConflict" dataSet1="${airing}" dataSet2="${unresolvedConflicts}"/>
+
+<c:if test="${empty allConflicts}">
+   <%--h3 style="font-size: 10pt; text-align: center; vertical-align: center; margin-top: 5px; margin-bottom: 5px;">There are no conflicts to report at this time.</h3--%>
+   There are no conflicts to report at this time.
+</c:if>
+<c:if test="${!empty allConflicts}">
+   <div style="padding: 2px 10px 2px 10px;">
+   <%--p>The following shows will not be recorded.  Select a show for further information and conflict resolution options.</p--%>
+   <sageutil:Size var="allConflictsCount" data="${allConflicts}"/>
+   <sageutil:Size var="unresolvedConflictsCount" data="${unresolvedConflicts}"/>
+   <c:if test="${allConflictsCount - unresolvedConflictsCount > 0}">
+      <img src="${cp}/m/images/ConflictResolvedMobile.png"/>
+      <c:if test="${allConflictsCount - unresolvedConflictsCount == 1}">
+         <%-- There is --%>${allConflictsCount - unresolvedConflictsCount} Resolved Conflict
+      </c:if>
+      <c:if test="${allConflictsCount - unresolvedConflictsCount != 1}">
+         <%-- There are --%>${allConflictsCount - unresolvedConflictsCount} Resolved Conflicts
+      </c:if>
+   </c:if>
+   <c:if test="${unresolvedConflictsCount > 0}">
+      <img src="${cp}/m/images/ConflictUnresolvedMobile.png"/>
+      <c:if test="${unresolvedConflictsCount == 1}">
+         <%-- There is --%>${unresolvedConflictsCount} Unresolved Conflict
+      </c:if>
+      <c:if test="${unresolvedConflictsCount != 1}">
+         <%-- There are --%>${unresolvedConflictsCount} Unresolved Conflicts
+      </c:if>
+   </c:if>
+   </div>
+</c:if>

@@ -1,0 +1,42 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sageglbl" tagdir="/WEB-INF/tags/sage/api/global" %> 
+<%@ taglib prefix="sagemsg" tagdir="/WEB-INF/tags/sage/api/systemmessage" %> 
+<%@ taglib prefix="sagemsgfn" tagdir="/WEB-INF/tags/sage/functions/systemmessage" %> 
+
+<%@ include file="contextpath.jspf"%>
+
+<div class="header">
+<div class="titlebar">
+   <a title="SageTV" href="${cp}/m/menu.jsp"><img class="logo" src="${cp}/m/images/SageLogo256smaller.png" alt="SageTV"/></a>
+</div>
+<div class="indicators">
+   <sagemsgfn:SupportsSystemMessages var="supportsSystemMessages"/>
+   <c:if test="${supportsSystemMessages}">
+      <sagemsg:GetSystemAlertLevel var="alertLevel"/>
+      <c:if test="${alertLevel > 0}">
+         <a title="System Messages" href="${cp}/m/systemmessages.jsp"><img style="border: 0px none; width: 20px; height: 20px;" src="${cp}/m/images/MarkerSysAlert${alertLevel}Mobile.png" alt="Message Level ${alertLevel}" title="Message Level ${alertLevel}"/></a>
+      </c:if>
+   </c:if>
+
+   <sageglbl:GetCurrentlyRecordingMediaFiles var="currentRecordings"/>
+   <c:if test="${!empty currentRecordings}">
+      <a title="Recording" href="${cp}/m/recordingschedule.jsp"><img src="${cp}/m/images/RecordingNowMobile.png" alt="Recording"/></a>
+   </c:if>
+   <sageglbl:GetAiringsThatWontBeRecorded var="allConflicts" onlyUnresolved="false"/>
+
+   <c:if test="${!empty allConflicts}">
+      <sageglbl:AreThereUnresolvedConflicts var="areThereUnresolvedConflicts"/>
+      <c:if test="${areThereUnresolvedConflicts}">
+         <a title="Unresolved Conflicts" href="${cp}/m/conflicts.jsp"><img src="${cp}/m/images/ConflictUnresolvedMobile.png" alt="Conflicts"/></a>
+      </c:if>
+      <c:if test="${!areThereUnresolvedConflicts}">
+         <a title="Resolved Conflicts" href="${cp}/m/conflicts.jsp"><img src="${cp}/m/images/ConflictResolvedMobile.png" alt="Conflicts"/></a>
+      </c:if>
+   </c:if>
+</div>
+<div class="title">
+   <c:if test="${!empty param.pageTitle}">
+      ${param.pageTitle}
+   </c:if>
+</div>
+</div>

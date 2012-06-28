@@ -1,0 +1,102 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sagemf" tagdir="/WEB-INF/tags/sage/api/mediafile" %> 
+<%@ taglib prefix="sageshow" tagdir="/WEB-INF/tags/sage/api/show" %> 
+<%@ taglib prefix="sageair" tagdir="/WEB-INF/tags/sage/api/airing" %> 
+<%@ taglib prefix="sageutil" tagdir="/WEB-INF/tags/sage/api/utility" %> 
+<%@ taglib prefix="sagefmf" tagdir="/WEB-INF/tags/sage/functions/mediafile" %>
+<%@ taglib prefix="sageshowfn" tagdir="/WEB-INF/tags/sage/functions/show" %> 
+<%@ taglib prefix="sageutilfn" tagdir="/WEB-INF/tags/sage/functions/utility" %>
+<%@ taglib prefix="sagecapdevfn" tagdir="/WEB-INF/tags/sage/functions/capturedevice" %>
+
+<%@ include file="contextpath.jspf"%>
+
+<sagemf:GetMediaFileAiring var="airing" mediaFile="${mediaFile}"/> 
+<sageair:GetAiringTitle var="title" airing="${airing}"/>
+<sageair:GetAiringID var="airingId" airing="${airing}"/>
+<sagemf:GetMediaFileID var="mediaFileId" mediaFile="${mediaFile}"/>
+<sageair:IsFavorite var="isFavorite" airing="${airing}" />
+<sageair:IsManualRecord var="isManualRecord" airing="${airing}" />
+<sageair:IsWatched var="isWatched" airing="${airing}" />
+<sageair:IsDontLike var="isDontLike" airing="${airing}" />
+<sageshow:GetShowEpisode var="episode" show="${airing}" />
+<sageshow:GetShowDescription var="description" show="${airing}" />
+<sageair:GetAiringChannelName var="channelName" airing="${airing}" />
+<sageair:GetAiringChannelNumber var="channelNumber" airing="${airing}" />
+<sageair:GetAiringStartTime var="airingStartTime" airing="${airing}" />
+<sageair:GetAiringEndTime var="airingEndTime" airing="${airing}" />
+<sagemf:IsFileCurrentlyRecording var="isFileCurrentlyRecording" mediaFile="${mediaFile}"/>
+<c:if test="${isFileCurrentlyRecording}">
+   <sagemf:GetFileStartTime var="recordingStartTime" mediaFile="${mediaFile}" />
+   <sageair:GetScheduleEndTime var="recordingEndTime" airing="${airing}" />
+</c:if>
+<c:if test="${!isFileCurrentlyRecording}">
+   <sagemf:GetFileStartTime var="recordingStartTime" mediaFile="${mediaFile}" />
+   <sagemf:GetFileEndTime var="recordingEndTime" mediaFile="${mediaFile}" />
+</c:if>
+
+<c:url var="recordingDetailUrl" value="details.jsp">
+   <c:param name="AiringId" value="${airingId}"></c:param>
+</c:url>
+<c:url var="thumbnailUrl" value="${cp}/MediaFileThumbnail">
+   <c:param name="MediaFileId" value="${mediaFileId}"/>
+   <c:param name="small" value="true"/>
+</c:url>
+
+<div class="<%--c:if test="${isManualRecord}">manualrecord </c:if><c:if test="${isDontLike}">dontlike </c:if><c:if test="${isFavorite}">favorite </c:if><c:if test="${isWatched}">watched </c:if--%>listcell">
+   <sagemf:IsFileCurrentlyRecording var="isFileRecording" mediaFile="${mediaFile}"/>
+   <div class="title<%--c:if test="${isWatched == true}"> watched</c:if--%>">
+   <c:if test="${!empty status}"><c:if test="${allowMultiSelect}"><input type="checkbox" name="MediaFileId" value="${mediaFileId}"/></c:if>${status.count}. </c:if><a href="${recordingDetailUrl}">${title}</a>
+   <c:if test="${isFileRecording == true}">
+      <img src="${cp}/images/RecordingNowMobile.png" alt="This show is currently recording." title="This show is currently recording."/>
+   </c:if>
+   </div>
+   <c:if test="${!empty episode}">
+      <p><b>${episode}</b></p>
+   </c:if>
+   <c:if test="${!empty description}">
+      <p>${description}</p>
+   </c:if>
+   <%--img src="${thumbnailUrl}"></img--%>
+   <p><%@ include file="markers.jspf" %></p>
+   <sageair:GetMediaFileForAiring var="mediaFile" airing="${airing}"/>
+   <sageutil:DateFormat var="recordingDateFmt" date="${recordingStartTime}" format="EEE, MMM d"/>
+   <sageutil:PrintTimeShort var="recordingStartTimeFmt" time="${recordingStartTime}"/>
+   <sageutil:PrintTimeShort var="recordingEndTimeFmt" time="${recordingEndTime}"/>
+   <p>${recordingDateFmt}, ${recordingStartTimeFmt} - ${recordingEndTimeFmt}</p>
+
+   <sageshowfn:SupportsSeasonAndEpisode var="supportsSeasonAndEpisode" show="${airing}"/>
+   <c:if test="${supportsSeasonAndEpisode}">
+      <sageshow:GetShowSeasonNumber var="seasonNumber" show="${airing}"/>
+      <sageshow:GetShowEpisodeNumber var="episodeNumber" show="${airing}"/>
+      <c:if test="${seasonNumber > 0 or episodeNumber > 0}">
+         <p>
+            <c:if test="${seasonNumber > 0}">
+               Season ${seasonNumber}<c:if test="${episodeNumber > 0}">, </c:if>
+            </c:if>
+            <c:if test="${episodeNumber > 0}">
+               Episode ${episodeNumber}
+            </c:if>
+         </p>
+      </c:if>
+   </c:if>
+
+   <c:if test="${!empty channelNumber}"><p>${channelNumber}-${channelName}</p></c:if>	
+
+   <sagecapdevfn:GetScheduledEncoder var="scheduledEncoder" airing="${airing}"/>
+   <c:if test="${!empty scheduledEncoder}"><p>${scheduledEncoder}</p></c:if>
+
+   <sagemf:GetSize var="size" mediaFile="${mediaFile}"/>
+   <c:set var="size" value="${size / 1000000}"/>
+   <p>
+   <c:if test="${size > 1000}">
+      <sageutil:NumberFormat var="formattedSize" format="0.00" number="${size / 1000}"/>
+      ${formattedSize} GB
+   </c:if>
+   <c:if test="${size <= 1000}">
+      <sageutil:NumberFormat var="formattedSize" format="0.00" number="${size}"/>
+      ${formattedSize} MB
+   </c:if>
+   <sagefmf:GetMediaFileFormatName var="format" mediafile="${mediaFile}"/>
+   ${format}
+   </p>
+</div>

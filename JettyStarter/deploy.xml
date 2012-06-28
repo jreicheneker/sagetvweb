@@ -1,0 +1,108 @@
+<!--
+    zip file structure
+    
+    JettyStarter.properties
+    JARs
+       jetty-starter.jar
+       jetty-6.1.11.jar
+       ant-1.6.5.jar
+       core-3.1.1.jar
+       jetty-util.6.1.11.jar
+       jsp-2.1.jar
+       jsp-api-2.1.jar
+       servlet-api-2.5-6.1.11.jar
+    jetty
+       contexts
+       etc
+          jetty.xml
+          jetty-jaas.xml
+          jetty-logging.xml
+          jetty-plus.xml
+          jetty-ssl.xml
+          jetty-sslengine.xml
+          keystore
+          login.conf
+          login.properties
+          realm.properties
+          webdefault.xml
+       lib
+       logs
+       static
+       webapps
+          index.html
+  -->
+<!-- TODO update Version.java, test, check in, tag with version, update wiki, build, create release, deploy zip file to sourceforge, update Sage forums download page and thread page --> 
+<project name="Create JettyStarter zip file" default="makezip" basedir=".">
+	
+    <property name="src.dir" value="src"/>
+    <property name="bin.dir" value="bin"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="build.dir" value="build"/>
+    <property name="dist.dir" value="dist"/>
+
+    <fileset id="lib.fileset" dir="${lib.dir}">
+        <!--exclude name="jetty-6.1.7.jar"/>
+        <exclude name="jetty-util.6.1.7.jar"/>
+        <exclude name="servlet-api-2.5-6.1.7.jar"/-->
+	</fileset>
+
+    <target name="compile" depends="">
+    	<!-- compile files in src dir to bin dir -->
+    	<mkdir dir="${bin.dir}"/>
+    	<javac srcdir="${src.dir}" destdir="${bin.dir}" source="1.5" target="1.5">
+    	    <classpath>
+                <fileset refid="lib.fileset"/>
+    	    </classpath>
+    	</javac>
+    </target>
+
+	<target name="makejar" depends="compile">
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/JARs"/>
+		<jar destfile="${build.dir}/JARs/jetty-starter.jar">
+            <fileset dir="${src.dir}"/>
+            <fileset dir="${bin.dir}"/>
+		</jar>
+	</target>
+
+    <target name="makezip" depends="clean all, compile, makejar">
+
+        <mkdir dir="${build.dir}"/>
+        <mkdir dir="${build.dir}/JARs"/>
+        <mkdir dir="${dist.dir}"/>
+
+        <copy file="JettyStarter.properties" todir="${build.dir}">
+        </copy>
+
+        <copy todir="${build.dir}/jetty">
+            <fileset dir="jetty"/>
+        </copy>
+
+    	<copy todir="${build.dir}/JARs">
+    	    <fileset refid="lib.fileset"/>
+        </copy>
+
+        <fixcrlf srcdir="${build.dir}" eol="dos">
+            <include name="**/*.txt"/>
+            <include name="**/*.xml"/>
+            <include name="**/*.conf"/>
+            <include name="**/*.properties"/>
+        </fixcrlf>
+
+    	<zip basedir="${build.dir}" destfile="${dist.dir}/jettystarter.zip">
+        </zip>
+
+    </target>
+
+    <target name="clean all" description="clean up" >
+    	<mkdir dir="${bin.dir}"/>
+    	<mkdir dir="${build.dir}"/>
+    	<mkdir dir="${dist.dir}"/>
+        <delete includeemptydirs="true">
+            <fileset dir="${bin.dir}" includes="**/*"/>
+            <fileset dir="${build.dir}" includes="**/*"/>
+            <fileset dir="${dist.dir}" includes="**/*"/>
+        </delete>
+    </target>
+
+</project>

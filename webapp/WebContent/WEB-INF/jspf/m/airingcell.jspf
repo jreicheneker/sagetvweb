@@ -1,0 +1,77 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sageshow" tagdir="/WEB-INF/tags/sage/api/show" %> 
+<%@ taglib prefix="sageair" tagdir="/WEB-INF/tags/sage/api/airing" %> 
+<%@ taglib prefix="sageutil" tagdir="/WEB-INF/tags/sage/api/utility" %> 
+<%@ taglib prefix="sagecapdevfn" tagdir="/WEB-INF/tags/sage/functions/capturedevice" %> 
+<%@ taglib prefix="sageshowfn" tagdir="/WEB-INF/tags/sage/functions/show" %> 
+
+<%@ include file="contextpath.jspf"%>
+
+<sageair:GetAiringTitle var="title" airing="${airing}"/>
+<sageair:GetAiringID var="airingId" airing="${airing}"/>
+<sageshow:GetShowEpisode var="episode" show="${airing}"/>
+<sageshow:GetShowDescription var="description" show="${airing}"/>
+<sageair:IsFavorite var="isFavorite" airing="${airing}" />
+<sageair:IsManualRecord var="isManualRecord" airing="${airing}" />
+<sageair:IsWatched var="isWatched" airing="${airing}" />
+<sageair:IsDontLike var="isDontLike" airing="${airing}" />
+<sageair:GetAiringChannelName var="channelName" airing="${airing}" />
+<sageair:GetAiringChannelNumber var="channelNumber" airing="${airing}" />
+<sageair:GetScheduleStartTime var="airingStartTime" airing="${airing}" />
+<sageair:GetScheduleEndTime var="airingEndTime" airing="${airing}" />
+<c:url var="recordingDetailUrl" value="details.jsp">
+   <c:param name="AiringId" value="${airingId}"></c:param>
+</c:url>
+
+<div class="<%--c:if test="${isManualRecord}">manualrecord </c:if><c:if test="${isDontLike}">dontlike </c:if><c:if test="${isFavorite}">favorite </c:if><c:if test="${isWatched}">watched </c:if--%>listcell">
+   <div class="title<%--c:if test="${isWatched == true}"> watched</c:if--%>">
+   <c:if test="${!empty status}"><c:if test="${allowMultiSelect}"><input type="checkbox" name="AiringId" value="${airingId}"/></c:if>${status.count}. </c:if><a href="${recordingDetailUrl}">${title}</a>
+   </div>
+   <%@ include file="conflictmarkers.jspf" %>
+   <c:if test="${!empty episode}">
+      <p><b>${episode}</b></p>
+   </c:if>
+   <c:if test="${!empty description}">
+      <p>${description}</p>
+   </c:if>
+   <p><%@ include file="markers.jspf" %></p>
+   <sageutil:DateFormat var="airingDateFmt" date="${airingStartTime}" format="EEE, MMM d"/>
+   <%--sageutilfn:LongToDate var="airingStartDate" value="${airingStartTime}"/>
+   <sageutilfn:SimpleDateFormat var="airingDateParamFmt" date="${airingStartDate}" format="yyyy/MM/dd"/>
+   <sageutilfn:SimpleDateFormat var="airingTimeParamFmt" date="${airingStartDate}" format="H"/--%>
+   <%--sageair:GetAiringDuration var="airingDuration" airing="${airing}"/--%>
+   <%--c:set var="airingDuration" value="${airingDuration / 3600000}"/--%><%-- milliseconds to hours (rounded up) --%>
+   <%--sageutilfn:Ceiling var="airingDuration" value="${airingDuration}"/--%>
+   <%--sageutil:NumberFormat var="airingDurationFmt" format="0" number="${airingDuration}"/--%>
+         <%--c:set var="periodStart" value="${dateLong - (dateLong % 3600000)}"/--%>
+   <sageutil:PrintTimeShort var="airingStartTimeFmt" time="${airingStartTime}"/>
+   <sageutil:PrintTimeShort var="airingEndTimeFmt" time="${airingEndTime}"/>
+   <%--c:url var="listingUrl" value="listings.jsp">
+      <c:param name="StartDate" value="${airingDateParamFmt}"></c:param>
+      <c:param name="StartHour" value="${airingTimeParamFmt}"></c:param>
+      <c:param name="TimeSpan" value="${airingDurationFmt}"></c:param>
+   </c:url>
+   <p><a href="${listingUrl}">${airingDateFmt}, ${airingStartTimeFmt} - ${airingEndTimeFmt}</a></p--%>
+   <p>${airingDateFmt}, ${airingStartTimeFmt} - ${airingEndTimeFmt}</p>
+
+   <sageshowfn:SupportsSeasonAndEpisode var="supportsSeasonAndEpisode" show="${airing}"/>
+   <c:if test="${supportsSeasonAndEpisode}">
+      <sageshow:GetShowSeasonNumber var="seasonNumber" show="${airing}"/>
+      <sageshow:GetShowEpisodeNumber var="episodeNumber" show="${airing}"/>
+      <c:if test="${seasonNumber > 0 or episodeNumber > 0}">
+         <p>
+            <c:if test="${seasonNumber > 0}">
+               Season ${seasonNumber}<c:if test="${episodeNumber > 0}">, </c:if>
+            </c:if>
+            <c:if test="${episodeNumber > 0}">
+               Episode ${episodeNumber}
+            </c:if>
+         </p>
+      </c:if>
+   </c:if>
+
+   <c:if test="${!empty channelNumber}"><p>${channelNumber}-${channelName}</p></c:if>	
+
+   <sagecapdevfn:GetScheduledEncoder var="scheduledEncoder" airing="${airing}"/>
+   <c:if test="${!empty scheduledEncoder}"><p>${scheduledEncoder}</p></c:if>
+</div>

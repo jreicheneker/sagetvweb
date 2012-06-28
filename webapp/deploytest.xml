@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+compile
+create war/dir
+upload to server
+touch/upload config file
+-->
+
+<project name="SageTV Web App" default="deploy">
+
+   <target name="build">
+      <ant antfile="deploy.xml" target="makezip"/>
+   </target>
+
+   <target name="deploy" depends="build">
+   	  <unzip src="dist/SageWebApp.zip" dest="${test.sagetv.home}"/>
+   	  <antcall target="updatecontext"/>
+      <antcall target="copycustommenu"/>
+   </target>
+
+   <target name="updatecontext">
+      <touch file="${test.sagetv.home}/jetty/contexts/sagewebapp.xml"/>
+   </target>
+
+   <target name="copycustommenu">
+      <copy todir="${test.sagetv.home}/jetty/user/sage">
+         <fileset dir="user/sage"/>
+      </copy>
+   </target>
+
+</project>

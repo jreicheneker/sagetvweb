@@ -1,0 +1,53 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%--
+  - Determine stylesheets based on device or browser type
+  --%>
+<c:set var="userAgent" value="${header['User-Agent']}"/>
+
+<c:set var="isWebKit"  value="${!empty userAgent and fn:contains(userAgent, 'WebKit')}"/>
+<c:set var="isKHTML"   value="${!empty userAgent and fn:contains(userAgent, 'KHTML')}"/>
+<c:set var="isIPhone"  value="${!empty userAgent and (fn:contains(userAgent, 'iPhone') or fn:contains(userAgent, 'iPod'))}"/>
+<c:set var="isIPad"    value="${!empty userAgent and (fn:contains(userAgent, 'iPad'))}"/>
+<c:set var="isChrome"  value="${!empty userAgent and fn:contains(userAgent, 'Chrome')}"/>
+<c:set var="isAndroid" value="${!empty userAgent and fn:contains(userAgent, 'Android')}"/>
+<c:set var="isMobile"  value="${!empty userAgent and fn:contains(userAgent, 'Mobile')}"/>
+
+<c:set var="isGecko"   value="${!empty userAgent and fn:contains(userAgent, 'Gecko')}"/>
+<c:set var="isMozilla" value="${!empty userAgent and fn:contains(userAgent, 'Mozilla')}"/>
+<c:set var="isFirefox" value="${!empty userAgent and fn:contains(userAgent, 'Firefox')}"/>
+<c:set var="isSafari"        value="${!empty userAgent and fn:contains(userAgent, 'Safari') and !isChrome and !isAndroid}"/>
+<c:set var="isDesktopSafari" value="${isSafari and !isMobile}"/>
+<c:set var="isMobileSafari"  value="${isSafari and isMobile}"/>
+
+<c:choose>
+   <c:when test="${isIPhone or isAndroid or isChrome or isWebKit or isKHTML}">
+      <!-- TODO: iPhone viewport, background, icon -->
+      <%--meta name="viewport" content="user-scalable=no, width=device-width" /--%>
+      <link rel="apple-touch-icon" href="${cp}/images/SageIcon64.png" /> <!-- iPhone home screen icon -->
+      <link rel="apple-touch-startup-image" href="${cp}/images/SageStartupLogo256-mgopenmodata13.png" /> <!-- iPhone startup graphic -->
+      <meta name="apple-mobile-web-app-capable" content="yes" />
+      <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+      <%--meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" name="viewport"/--%>
+      <meta content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no;" name="viewport"/>
+      <%--link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="${cp}/themes/sagem/theme.css"/--%>
+
+      <script src="${cp}/js/jquery-1.4.2.js" type="text/javascript" charset="utf-8"></script>
+      <script src="${cp}/js/jquery.form.js" type="text/javascript" charset="utf-8"></script>
+
+      <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="${cp}/m/css/sage_mobile.css"/>
+      <link rel="Shortcut Icon" href="${cp}/favicon.ico" type="image/x-icon"/>
+   </c:when>
+   <c:when test="${isIPhone}">
+       <!-- iPhone -->
+   </c:when>
+   <c:otherwise>
+      <script src="${cp}/js/jquery-1.4.2.js" type="text/javascript" charset="utf-8"></script>
+      <script src="${cp}/js/jquery.form.js" type="text/javascript" charset="utf-8"></script>
+
+      <link rel="stylesheet" type="text/css" media="screen" charset="utf-8" href="${cp}/m/css/sage_mobile.css"/>
+      <link rel="Shortcut Icon" href="${cp}/favicon.ico" type="image/x-icon"/>
+   </c:otherwise>
+</c:choose>
+
+<!--  TOOD user stylesheet from jetty/user/<context_path> -->

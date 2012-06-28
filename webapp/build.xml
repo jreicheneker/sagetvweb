@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="SageTV Mobile Web Interface" default="dist">
+
+   <buildnumber/>
+   <property file="build.properties"/>
+
+   <property name="plugin.version" value="2.1.0"/>
+
+   <property name="src.dir"   location="src"/>
+   <property name="build.dir" location="build"/>
+   <property name="dist.dir"  location="dist"/>
+
+   <condition property="sage.lib.dir" value="/usr/local/lib/sagetv" else="C:/sagelibs">
+      <os family="unix" />
+   </condition>
+   <property name="jetty.lib.dir" location="../JettyStarter/build/zip/JARs/"/>
+
+   <condition property="plugin.impl.version" value="${plugin.version}.${build.number}" else="${plugin.version}">
+      <isset property="build.number"/>
+   </condition>
+
+   <!--property name="download.url.location" value="http://download.sage.tv/plugins/jreichen/mobileweb"/-->
+   <property name="download.url.location" value="http://downloads.sourceforge.net/project/sageplugins/Mobile%20Web%20Interface/${plugin.version}/plugin"/>
+   <property name="download.url.params" value="?use_mirror="/>
+   
+   <path id="jetty.classpath.id">
+      <fileset dir="${jetty.lib.dir}" includes="*.jar"/>
+   </path>
+
+   <!--
+      - The target thatHudson calls when launching this build.  It has steps specific
+      - to building from Hudson as opposed to building from the Eclipse development
+      - environment or the command line.
+     -->
+   <target name="hudson">
+      <echo message="Building from Hudson..."/>
+      <!-- use the checked-in properties file -->
+      <copy file="build.properties.template" tofile="build.properties" overwrite="yes" failonerror="no"/>
+      <!-- get environment variables to see if HUDSON_HOME is being used to override the location -->
+      <property environment="env"/>
+      <condition property="hudson.home.dir" value="${env.HUDSON_HOME}" else="${user.home}/.hudson">
+         <isset property="env.HUDSON_HOME"/>
+      </condition>
+      <echo message="Hudson home directory ${hudson.home.dir}"/>
+      <!-- build JettyStarter for dependencies -->
+      <ant dir="../../JettyStarter/workspace/" target="hudson" inheritAll="false" />
+      <!-- call the default target of this file -->
+      <ant antfile="build.xml" inheritall="false">
+         <!-- The jar with the SageTV APIs is placed in the Hudson home directory -->
+         <property name="sage.lib.dir" value="${hudson.home.dir}"/>
+         <property name="jetty.lib.dir" location="../../JettyStarter/workspace/build/zip/JARs/"/>
+         <property name="build.number" value="${env.BUILD_NUMBER}"/>
+      </ant>
+   </target>
+
+   <target name="init" depends="clean">
+      <tstamp/>
+
+      <echo message="SageTV library location: ${sage.lib.dir}"/>
+      <echo message="Jetty library location: ${jetty.lib.dir}"/>
+
+      <mkdir dir="${build.dir}"/>
+      <mkdir dir="${build.dir}/classes"/>
+      <mkdir dir="${build.dir}/war"/>
+      <mkdir dir="${build.dir}/zip"/>
+      <mkdir dir="${build.dir}/zip/jetty"/>
+      <mkdir dir="${build.dir}/zip/jetty/contexts"/>
+      <mkdir dir="${build.dir}/zip/jetty/webapps"/>
+      <mkdir dir="${build.dir}/packages"/>
+      <mkdir dir="${build.dir}/packages/context"/>
+      <mkdir dir="${build.dir}/packages/war"/>
+      <mkdir dir="${dist.dir}"/>
+   </target>
+
+   <target name="compile" depends="init">
+      <javac source="1.5"
+             target="1.5"
+             debug="true"
+             debuglevel="lines,vars,source"
+             srcdir="${src.dir}"
+             destdir="${build.dir}/classes"
+      >
+         <classpath>
+            <path location="${sage.lib.dir}/Sage.jar"/>
+            <path refid="jetty.classpath.id"/>
+         </classpath>
+      </javac>
+   </target>
+
+   <target name="war" depends="compile">
+
+      <copy todir="${build.dir}/war" includeemptydirs="true">
+          <fileset dir="WebContent">
+              <exclude name=".directory"/> <!-- KDE artifact -->
+          </fileset>
+      </copy>
+
+      <fixcrlf srcdir="${build.dir}/war" eol="dos">
+          <include name="**/*.MF"/>
+          <include name="**/*.xml"/>
+          <include name="**/*.css"/>
+          <include name="**/*.js"/>
+          <include name="**/*.jsp"/>
+          <include name="**/*.jspf"/>
+          <include name="**/*.json"/>
+          <include name="**/*.tag"/>
+      </fixcrlf>
+
+      <war basedir="${build.dir}/war"
+           destfile="${build.dir}/SageWebApp.war"
+           manifest="${build.dir}/war/META-INF/MANIFEST.MF"
+           webxml="${build.dir}/war/WEB-INF/web.xml"
+      >
+         <classes dir="${build.dir}/classes"/>
+         <manifest>
+            <attribute name="Specification-Title" value="Mobile Web Interface for SageTV"/>
+            <attribute name="Specification-Version" value="${plugin.version}"/>
+            <attribute name="Implementation-Title" value="Mobile Web Interface for SageTV"/>
+            <attribute name="Implementation-Version" value="${plugin.impl.version}"/>
+         </manifest>
+      </war>
+   </target>
+   
+   <target name="zip" depends="war">
+
+      <copy todir="${build.dir}/zip/jetty/contexts">
+           <fileset file="resources/contexts/sagewebapp.xml"/>
+      </copy>
+
+      <copy todir="${build.dir}/zip/jetty/webapps">
+          <fileset file="${build.dir}/SageWebApp.war"/>
+      </copy>
+
+      <fixcrlf srcdir="${build.dir}/zip" eol="dos">
+          <include name="**/*.xml"/>
+      </fixcrlf>
+
+      <zip destfile="${dist.dir}/SageWebApp.zip">
+         <zipfileset dir="${build.dir}/zip"/> 
+      </zip>
+
+   </target>
+
+   <target name="package-context">
+     <copy todir="${build.dir}/packages/context" file="resources/contexts/sagewebapp.xml"/>
+
+     <fixcrlf srcdir="${build.dir}/packages/context" eol="dos">
+       <include name="**/*.xml"/>
+     </fixcrlf>
+
+     <zip destfile="${build.dir}/packages/sagewebapp-context-file-${plugin.impl.version}.zip">
+       <zipfileset prefix="jetty/contexts" dir="${build.dir}/packages/context"/>
+     </zip>
+   </target>
+
+   <target name="package-war">
+     <copy todir="${build.dir}/packages/war" file="${build.dir}/SageWebApp.war"/>
+
+     <zip destfile="${build.dir}/packages/sagewebapp-war-file-${plugin.impl.version}.zip">
+       <zipfileset dir="${build.dir}/packages/war" prefix="jetty/webapps" />
+     </zip>
+   </target>
+
+   <!-- Create the plugin's package for SageTV 7.0 and later -->
+   <target name="dist-plugin" depends="package-context, package-war">
+
+     <copy tofile="${build.dir}/packages/plugin-${plugin.impl.version}.xml" file="resources/plugin/plugin.xml">
+     </copy>
+
+     <tstamp>
+        <format property="last.modified" pattern="yyyy.MM.dd" />
+     </tstamp>
+
+     <checksum file="${build.dir}/packages/sagewebapp-context-file-${plugin.impl.version}.zip" property="md5.context-file"/>
+     <checksum file="${build.dir}/packages/sagewebapp-war-file-${plugin.impl.version}.zip" property="md5.war-file"/>
+
+      <replace file="${build.dir}/packages/plugin-${plugin.impl.version}.xml" summary="yes">
+         <replacefilter token="@@context-file-checksum@@"     value="${md5.context-file}"/>
+         <replacefilter token="@@war-file-checksum@@"         value="${md5.war-file}"/>
+         <replacefilter token="@@last-modified@@"             value="${last.modified}"/>
+         <replacefilter token="@@download-url-location@@"     value="${download.url.location}"/>
+         <replacefilter token="@@download-url-params@@"       value="${download.url.params}"/>
+         <replacefilter token="@@plugin-impl-version@@"       value="${plugin.impl.version}"/>
+      </replace>
+
+     <zip basedir="${build.dir}/packages" destfile="${dist.dir}/sagewebapp-plugin-${plugin.impl.version}.zip">
+        <include name="*.zip"/>
+        <include name="*.xml"/>
+     </zip>
+
+   </target>
+
+   <!-- upload to sagetv plugin area -->
+   <target name="publish-plugin" depends="dist-plugin">
+      <!-- download commons-net so that we can use the ftp plugin -->
+      <mkdir dir="${user.home}/.ant/lib" />
+      <get src="http://repo1.maven.org/maven2/commons-net/commons-net/1.4.1/commons-net-1.4.1.jar" dest="${user.home}/.ant/lib/commons-net-1.4.1.jar" usetimestamp="true" />
+
+      <ftp remotedir="plugins/${author}/JARS" password="${sage.uploadpass}" server="download2.sagetv.com" userid="${sage.uploaduser}" action="mkdir" />
+      <ftp remotedir="plugins/${author}/JARS" password="${sage.uploadpass}" server="download2.sagetv.com" userid="${sage.uploaduser}" binary="true" action="send">
+         <fileset dir="${dist.dir}" />
+      </ftp>
+   </target>
+
+   <target name="dist" depends="zip, dist-plugin">
+   </target>
+
+   <target name="clean">
+      <delete dir="${build.dir}"/>
+      <delete dir="${dist.dir}"/>
+   </target>
+
+</project>
